@@ -23,21 +23,18 @@ public class LocationFactory
 
         await Task.WhenAll(maybeCityNameTask, maybeLocationNameTask);
 
-        Maybe<string> maybeCityName = await maybeCityNameTask;
-        if (maybeCityName.HasNoValue)
+        Maybe<string> cityName = await maybeCityNameTask;
+        if (cityName.HasNoValue)
         {
-            return CoordinatesErrors.CityNameNotRetrieved(coordinates);
+            return CityErrors.CityNotFoundByCoordinates(coordinates);
+        }
+        
+        Maybe<City> maybeCity = await cityRepository.GetCityByNameAsync(cityName.Value, cancellationToken);
+        if (maybeCity.HasValue)
+        {
+            return CityErrors.CityNotFoundByName(cityName.Value);
         }
 
-        Maybe<string> maybeLocationName = await maybeLocationNameTask;
-        if (maybeLocationName.HasNoValue)
-        {
-            return CoordinatesErrors.LocationNameNotRetrieved(coordinates);
-        }
-
-        Maybe<City> maybeCity = await cityRepository.GetCityByNameAsync(maybeCityName.Value, cancellationToken);
-        return maybeCity.HasNoValue
-            ? CityErrors.CityNotFoundByName(maybeCityName.Value)
-            : new Location(Guid.NewGuid(), maybeLocationName.Value, maybeCity.Value, coordinates);
+        return Location.Create(Guid.NewGuid(), await maybeLocationNameTask, maybeCity.Value, coordinates);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 using TripManagement.Domain.Common;
-using TripManagement.Domain.TripsAggregate;
 
 namespace TripManagement.Domain.TripsAggregate.Services;
 

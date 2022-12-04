@@ -1,6 +1,7 @@
 ﻿#pragma warning disable 8618
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
+using Arch.SharedKernel.Results;
 using TripManagement.Domain.CitiesAggregate;
 using TripManagement.Domain.Common;
 
@@ -17,6 +18,12 @@ public sealed class Location : Entity
         City = city.NonNull();
         Coordinates = coordinates.NonNull();
     }
+
+    public static Result<Location> Create(Guid id, Maybe<string> maybeName, City city, Coordinates coordinates) =>
+        maybeName.HasNoValue ?
+        new ErrorResult("", "") :
+            new Location(id, maybeName.Value, city, coordinates);
+
 
     public Guid Id { get; private set; } = Guid.NewGuid();
 
