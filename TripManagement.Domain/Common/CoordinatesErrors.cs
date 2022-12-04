@@ -1,0 +1,20 @@
+﻿using System.Globalization;
+using Arch.SharedKernel;
+using Arch.SharedKernel.Results;
+
+namespace TripManagement.Domain.Common;
+
+public static class CoordinatesErrors
+{
+    public static ErrorResult OutOfRangeCoordinates(string argument, decimal min, decimal max) => new(
+            CoordinatesErrorConstants.OutOfRangeCoordinatesCode,
+            string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.OutOfRangeCoordinatesMessage, argument, min, max));
+
+    public static ErrorResult CityNameNotRetrieved(Coordinates coordinates) => new(
+            CoordinatesErrorConstants.CityNameCode,
+            string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.CityNameMessage, coordinates.NonNull().Latitude, coordinates.Longitude));
+
+    public static ErrorResult LocationNameNotRetrieved(Coordinates coordinates) => new(
+            CoordinatesErrorConstants.LocationNameCode,
+            string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.LocationNameMessage, coordinates.NonNull().Latitude, coordinates.Longitude));
+}
