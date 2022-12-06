@@ -24,6 +24,8 @@ public sealed class Trip : Entity, IAggregateRoot
         CurrentCoordinates = origin.Coordinates;
         TripStatus = TripStatus.Draft;
         Kilometers = 0;
+
+        this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
     }
 
     public Trip(Trip trip) 
@@ -55,11 +57,6 @@ public sealed class Trip : Entity, IAggregateRoot
         kilomenters >= MinimumDistanceBetweenLocations ?
             Result.Ok() :
             TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations);
-
-    public Trip CalculateTripCredits() => new(this)
-    {
-        CreditsCost = this.CalculateCredits(Origin, Destination)
-    };
 
     //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
     //        Result.Ok() :
