@@ -16,7 +16,7 @@ public class LocationsService
         this.cityRepository = cityRepository.NonNull();
     }
 
-    public async Task<Result<(Location, Location)>> CreateTripLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
+    public async Task<Result<(Location origin, Location destination)>> CreateTripLocationsAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default)
     {
         Result<Location> originLocation = await CreateAsync(origin, cancellationToken);
         if (originLocation.Failure)

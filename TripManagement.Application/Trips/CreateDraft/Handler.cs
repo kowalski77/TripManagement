@@ -24,9 +24,9 @@ public sealed class Handler : ICommandHandler<Request, Result<CreateDraftRespons
 
     public async Task<Result<CreateDraftResponse>> Handle(Request request, CancellationToken cancellationToken)
     {
-        Result<Coordinates> originCoordinates = Coordinates.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
-        Result<Coordinates> destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
-        Result<UserId> userId = UserId.CreateInstance(request.CreateDraft.UserId);
+        var originCoordinates = Coordinates.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
+        var userId = UserId.CreateInstance(request.CreateDraft.UserId);
 
         return await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
@@ -42,7 +42,7 @@ public sealed class Handler : ICommandHandler<Request, Result<CreateDraftRespons
             .OnSuccess(async () => await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken))
             .OnSuccess(async locations =>
             {
-                Trip trip = new(Guid.NewGuid(), userId, pickUp, locations.Item1, locations.Item2);
+                Trip trip = new(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination);
                 tripRepository.Add(trip);
                 await tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
