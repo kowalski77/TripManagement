@@ -7,6 +7,6 @@ public static class DomainExtensions
 {
     public static void AddDomainServices(this IServiceCollection services) => 
         services
-        .AddScoped<TripService>()
-        .AddScoped<LocationFactory>();
+        .AddScoped<TripsService>()
+        .AddScoped<LocationsService>();
 }
