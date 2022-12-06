@@ -28,34 +28,25 @@ public sealed class Handler : ICommandHandler<Request, Result<CreateDraftRespons
         Result<Coordinates> destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
         Result<UserId> userId = UserId.CreateInstance(request.CreateDraft.UserId);
 
-        Result<CreateDraftResponse> resultModel = await Result.Init
+        return await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
             .OnSuccess(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
             .OnSuccess(trip => new CreateDraftResponse(trip.Id));
-
-        return resultModel;
     }
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
     {
-        var distanceInKm = await coordinatesAgent.GetDistanceInKmBetweenCoordinatesAsync(origin, destination, cancellationToken);
-        Result dinstanceValidationResult = Trip.ValidateDistance(distanceInKm);
-        if (dinstanceValidationResult.Failure)
-        {
-            return dinstanceValidationResult.Error!;
-        }
+        var distanceInKmResult = await coordinatesAgent.GetDistanceInKmBetweenCoordinatesAsync(origin, destination, cancellationToken);
 
-        Result<(Location originLocation, Location destinationLocation)> locations = await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken);
-        if (locations.Failure)
-        {
-            return locations.Error!;
-        }
+        return await Trip.ValidateDistance(distanceInKmResult)
+            .OnSuccess(async () => await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken))
+            .OnSuccess(async locations =>
+            {
+                Trip trip = new(Guid.NewGuid(), userId, pickUp, locations.Item1, locations.Item2);
+                tripRepository.Add(trip);
+                await tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-        Trip trip = new(Guid.NewGuid(), userId, pickUp, locations.Value.originLocation, locations.Value.destinationLocation);
-
-        tripRepository.Add(trip);
-        await tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-        return trip;
+                return trip;
+            });
     }
 }
