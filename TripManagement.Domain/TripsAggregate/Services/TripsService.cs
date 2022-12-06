@@ -25,6 +25,9 @@ public sealed class TripsService
             .OnSuccess(trip => trip.CalculateTripCredits());
 
     private async Task<Result> ValidateDistanceBetweenCoordinatesAsync(
-        Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
-        Trip.ValidateDistance(await this.coordinatesAgent.GetDistanceInKmBetweenCoordinatesAsync(origin, destination, cancellationToken));
+        Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
+    {
+        var distance = await this.coordinatesAgent.GetDistanceInKmBetweenCoordinatesAsync(origin, destination, cancellationToken);
+        return Trip.ValidateDistance(distance);
+    }
 }
