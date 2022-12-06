@@ -44,4 +44,15 @@ public static class ResultExtensions
             await func.NonNull()(awaitedResult.Value).ConfigureAwait(false) :
             awaitedResult.Error!;
     }
+
+    public static Result Validate(this Result _, params Result[] results)
+    {
+        List<ErrorResult> errorCollection = (from result in results
+                                             where result.Failure
+                                             select result.Error!).ToList();
+
+        return errorCollection.Any() ?
+            errorCollection.First()! :  //TODO: rethink this, handle error collections in result & envelope
+            Result.Ok();
+    }
 }

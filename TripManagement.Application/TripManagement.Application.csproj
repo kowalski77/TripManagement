@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TripManagement.Contracts\TripManagement.Contracts.csproj" />
     <ProjectReference Include="..\TripManagement.Infrastructure\TripManagement.Infrastructure.csproj" />
   </ItemGroup>
 
