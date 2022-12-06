@@ -9,12 +9,12 @@ namespace TripManagement.Application.Trips.CreateDraft;
 
 public sealed record Request(CreateDraftRequest CreateDraft) : ICommand<Result<CreateDraftResponse>>;
 
-public sealed class CreateDraftTripHandler : ICommandHandler<Request, Result<CreateDraftResponse>>
+public sealed class Handler : ICommandHandler<Request, Result<CreateDraftResponse>>
 {
     private readonly TripsService tripService;
-    private readonly ITripRepository tripRepository;
+    private readonly ITripsRepository tripRepository;
 
-    public CreateDraftTripHandler(TripsService tripService, ITripRepository tripRepository)
+    public Handler(TripsService tripService, ITripsRepository tripRepository)
     {
         this.tripService = tripService;
         this.tripRepository = tripRepository;

@@ -1,3 +1,5 @@
+using TripManagement.API.Api;
+using TripManagement.Application;
 using TripManagement.Domain;
 using TripManagement.Infrastructure;
 
@@ -5,6 +7,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddApplicationServices();
 builder.Services.AddDomainServices();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -17,6 +20,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapGroup("/trips").MapTripsEndpoints();
 
 await app.RunAsync();
 

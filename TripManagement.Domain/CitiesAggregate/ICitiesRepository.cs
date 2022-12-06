@@ -2,7 +2,7 @@
 
 namespace TripManagement.Domain.CitiesAggregate;
 
-public interface ICityRepository
+public interface ICitiesRepository
 {
     Task<Maybe<City>> GetCityByNameAsync(string name, CancellationToken cancellationToken = default);
 }

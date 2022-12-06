@@ -2,6 +2,6 @@
 
 namespace TripManagement.Domain.TripsAggregate;
 
-public interface ITripRepository : IRepository<Trip>
+public interface ITripsRepository : IRepository<Trip>
 {
 }

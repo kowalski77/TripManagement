@@ -11,6 +11,6 @@ public static class InfrastructureExtensions
     {
         services.AddAgents();
         services.AddRepositories();
-        services.AddSqlPersistence(configuration.GetConnectionString("TripManagement")!);
+        services.AddSqlPersistence(configuration.GetConnectionString("DefaultConnection")!);
     }
 }

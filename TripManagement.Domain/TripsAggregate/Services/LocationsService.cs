@@ -8,9 +8,9 @@ namespace TripManagement.Domain.TripsAggregate.Services;
 public class LocationsService
 {
     private readonly ICoordinatesAgent coordinatesAgent;
-    private readonly ICityRepository cityRepository;
+    private readonly ICitiesRepository cityRepository;
 
-    public LocationsService(ICoordinatesAgent coordinatesAgent, ICityRepository cityRepository)
+    public LocationsService(ICoordinatesAgent coordinatesAgent, ICitiesRepository cityRepository)
     {
         this.coordinatesAgent = coordinatesAgent.NonNull();
         this.cityRepository = cityRepository.NonNull();

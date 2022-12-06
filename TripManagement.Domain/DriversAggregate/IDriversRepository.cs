@@ -2,6 +2,6 @@
 
 namespace TripManagement.Domain.DriversAggregate;
 
-public interface IDriverRepository : IRepository<Driver>
+public interface IDriversRepository : IRepository<Driver>
 {
 }

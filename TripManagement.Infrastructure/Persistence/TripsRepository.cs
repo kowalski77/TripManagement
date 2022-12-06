@@ -4,7 +4,7 @@ using TripManagement.Domain.TripsAggregate;
 
 namespace TripManagement.Infrastructure.Persistence
 {
-    internal class TripsRepository : BaseRepository<Trip>, ITripRepository
+    internal class TripsRepository : BaseRepository<Trip>, ITripsRepository
     {
         private readonly TripManagementContext context;
 

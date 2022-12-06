@@ -18,11 +18,12 @@ public sealed class TripsService
     public async Task<Result<Trip>> CreateDraftTripAsync(
         UserId userId, DateTime pickUp,
         Coordinates origin, Coordinates destination,
-        CancellationToken cancellationToken = default) => await Result.Init
-            .OnSuccess(async () => await this.ValidateDistanceBetweenCoordinatesAsync(origin.NonNull(), destination.NonNull(), cancellationToken))
-            .OnSuccess(async () => await this.locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken))
-            .OnSuccess(locations => new Trip(Guid.NewGuid(), userId.NonNull(), pickUp, locations.Item1, locations.Item2))
-            .OnSuccess(trip => trip.CalculateTripCredits());
+        CancellationToken cancellationToken = default) => 
+            await Result.Init
+                .OnSuccess(async () => await this.ValidateDistanceBetweenCoordinatesAsync(origin.NonNull(), destination.NonNull(), cancellationToken))
+                .OnSuccess(async () => await this.locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken))
+                .OnSuccess(locations => new Trip(Guid.NewGuid(), userId.NonNull(), pickUp, locations.Item1, locations.Item2))
+                .OnSuccess(trip => trip.CalculateTripCredits());
 
     private async Task<Result> ValidateDistanceBetweenCoordinatesAsync(
         Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
