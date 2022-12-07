@@ -5,7 +5,7 @@ using TripManagement.Domain.TripsAggregate;
 
 namespace TripManagement.Infrastructure.Persistence;
 
-internal class TripManagementContext : TransactionContext
+public class TripManagementContext : TransactionContext
 {
     public TripManagementContext(DbContextOptions options, IMediator mediator) 
         : base(options, mediator)

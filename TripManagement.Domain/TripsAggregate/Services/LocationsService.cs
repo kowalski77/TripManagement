@@ -25,7 +25,10 @@ public class LocationsService
         }
 
         Result<Location> destinationLocation = await CreateAsync(destination, cancellationToken);
-        return destinationLocation.Failure ? destinationLocation.Error! : (originLocation.Value, destinationLocation.Value);
+        
+        return destinationLocation.Failure ? 
+            destinationLocation.Error! : 
+            (originLocation.Value, destinationLocation.Value);
     }
 
     private async Task<Result<Location>> CreateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)

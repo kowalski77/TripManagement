@@ -7,7 +7,7 @@ using TripManagement.Domain.TripsAggregate;
 
 namespace TripManagement.Infrastructure.Persistence;
 
-internal static class PersistenceExtensions
+public static class PersistenceExtensions
 {
     public static void AddRepositories(this IServiceCollection services)
     {

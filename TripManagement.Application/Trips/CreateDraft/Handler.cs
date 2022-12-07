@@ -1,5 +1,5 @@
-﻿using Arch.SharedKernel.Mediator;
-using Arch.SharedKernel.Results;
+﻿using Arch.SharedKernel.Results;
+using MediatR;
 using TripManagement.Contracts.Models;
 using TripManagement.Domain.Common;
 using TripManagement.Domain.TripsAggregate;
@@ -7,9 +7,9 @@ using TripManagement.Domain.TripsAggregate.Services;
 
 namespace TripManagement.Application.Trips.CreateDraft;
 
-public sealed record Request(CreateDraftRequest CreateDraft) : ICommand<Result<CreateDraftResponse>>;
+public sealed record Request(CreateDraftRequest CreateDraft) : IRequest<Result<CreateDraftResponse>>;
 
-public sealed class Handler : ICommandHandler<Request, Result<CreateDraftResponse>>
+public sealed class Handler : IRequestHandler<Request, Result<CreateDraftResponse>>
 {
     private readonly LocationsService locationsService;
     private readonly ITripsRepository tripRepository;
