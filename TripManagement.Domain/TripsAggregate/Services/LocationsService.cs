@@ -50,6 +50,16 @@ public class LocationsService
             return CityErrors.CityNotFoundByName(cityName.Value);
         }
 
-        return Location.Create(Guid.NewGuid(), await maybeLocationNameTask, maybeCity.Value, coordinates);
+        Maybe<string> maybeLocationName = await maybeLocationNameTask;
+        if (maybeLocationName.HasNoValue)
+        {
+            return TripErrors.LocationNotFoundByCoordinates(coordinates);
+        }
+
+        return Location.Create(
+            Guid.NewGuid(), 
+            LocationName.Create(maybeLocationName.Value), 
+            maybeCity.Value, 
+            coordinates);
     }
 }

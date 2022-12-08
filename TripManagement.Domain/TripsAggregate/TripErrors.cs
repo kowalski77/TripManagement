@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Arch.SharedKernel.Results;
+using TripManagement.Domain.Common;
 
 namespace TripManagement.Domain.TripsAggregate;
 
@@ -34,5 +35,16 @@ public static class TripErrors
         return new ErrorResult(
             TripErrorConstants.InvalidateFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.InvalidateFailedMessage, status.ToString()));
+    }
+
+    public static ErrorResult LocationNotFoundByCoordinates(Coordinates coordinates)
+    {
+        return new ErrorResult(
+            TripErrorConstants.LocationNotFoundByCoordinatesCode,
+            string.Format(
+                CultureInfo.InvariantCulture,
+                TripErrorConstants.LocationNotFoundByCoordinatesMessage,
+                coordinates.Latitude.ToString(CultureInfo.InvariantCulture),
+                coordinates.Longitude.ToString(CultureInfo.InvariantCulture)));
     }
 }

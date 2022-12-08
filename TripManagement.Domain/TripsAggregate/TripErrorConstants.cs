@@ -16,4 +16,7 @@ public static class TripErrorConstants
 
     public const string UserTripNotFoundCode = "usertrip.not.found";
     public const string TripNotFoundMessage = "Trip for user with id {0} not found";
+
+    public const string LocationNotFoundByCoordinatesCode = "location.not.found.by.coordinates";
+    public const string LocationNotFoundByCoordinatesMessage = "Location not found by coordinates {0} {1}";
 }

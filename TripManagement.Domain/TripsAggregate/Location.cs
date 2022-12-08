@@ -7,6 +7,11 @@ using TripManagement.Domain.Common;
 
 namespace TripManagement.Domain.TripsAggregate;
 
+public record LocationName(string Value)
+{
+    public static LocationName Create(string value) => new(value);
+}
+
 public sealed class Location : Entity
 {
     private Location() { }
@@ -19,10 +24,10 @@ public sealed class Location : Entity
         Coordinates = coordinates.NonNull();
     }
 
-    public static Result<Location> Create(Guid id, Maybe<string> maybeName, City city, Coordinates coordinates) =>
-        maybeName.HasNoValue ?
+    public static Result<Location> Create(Guid id, LocationName locationName, City city, Coordinates coordinates) =>
+        string.IsNullOrEmpty(locationName.Value) ?
         new ErrorResult("", "") :
-            new Location(id, maybeName.Value, city, coordinates);
+            new Location(id, locationName.Value, city, coordinates);
 
 
     public Guid Id { get; private set; } = Guid.NewGuid();

@@ -7,83 +7,57 @@ public readonly struct Maybe<T> : IEquatable<Maybe<T>>
     private Maybe(T value)
     {
         this.value = value;
-        this.HasValue = true;
+        HasValue = true;
     }
 
-    public T Value => this.ValueOrThrow();
+    public T Value => ValueOrThrow();
 
     public bool HasValue { get; }
 
-    public bool HasNoValue => !this.HasValue;
+    public bool HasNoValue => !HasValue;
 
     public TResult Match<TResult>(Func<T, TResult> some, Func<TResult> none)
     {
         ArgumentNullException.ThrowIfNull(some);
         ArgumentNullException.ThrowIfNull(none);
 
-        return this.HasValue ? some(this.value) : none();
+        return HasValue ? some(value) : none();
     }
 
     public static implicit operator Maybe<T>(T? value) =>
         value == null ? new Maybe<T>() : new Maybe<T>(value);
 
     public static implicit operator Maybe<T>(Maybe _) => None;
-    
+
     public static Maybe<T> None => new();
 
     public Maybe<TResult> Map<TResult>(Func<T, TResult> convert)
     {
         ArgumentNullException.ThrowIfNull(convert);
 
-        return !this.HasValue ? new Maybe<TResult>() : convert(this.value);
+        return !HasValue ? new Maybe<TResult>() : convert(value);
     }
 
     public Maybe<TResult> Bind<TResult>(Func<T, Maybe<TResult>> convert)
     {
         ArgumentNullException.ThrowIfNull(convert);
 
-        return !this.HasValue ? new Maybe<TResult>() : convert(this.value);
+        return !HasValue ? new Maybe<TResult>() : convert(value);
     }
 
-    public T ValueOrThrow(string? errorMessage = null)
-    {
-        if (this.HasValue)
-        {
-            return this.value;
-        }
+    public T ValueOrThrow(string? errorMessage = null) => HasValue ? value : throw new InvalidOperationException(errorMessage);
 
-        throw new InvalidOperationException(errorMessage);
-    }
+    public Maybe<T> ToMaybe() => throw new NotImplementedException();
 
-    public Maybe<T> ToMaybe()
-    {
-        throw new NotImplementedException();
-    }
+    public bool Equals(Maybe<T> other) => HasValue == other.HasValue && EqualityComparer<T>.Default.Equals(value, other.value);
 
-    public bool Equals(Maybe<T> other)
-    {
-        return this.HasValue == other.HasValue && EqualityComparer<T>.Default.Equals(this.value, other.value);
-    }
+    public override bool Equals(object? obj) => obj is Maybe<T> other && Equals(other);
 
-    public override bool Equals(object? obj)
-    {
-        return obj is Maybe<T> other && this.Equals(other);
-    }
+    public override int GetHashCode() => HashCode.Combine(HasValue, value);
 
-    public override int GetHashCode()
-    {
-        return HashCode.Combine(this.HasValue, this.value);
-    }
+    public static bool operator ==(Maybe<T> left, Maybe<T> right) => left.Equals(right);
 
-    public static bool operator ==(Maybe<T> left, Maybe<T> right)
-    {
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(Maybe<T> left, Maybe<T> right)
-    {
-        return !left.Equals(right);
-    }
+    public static bool operator !=(Maybe<T> left, Maybe<T> right) => !left.Equals(right);
 }
 
 public struct Maybe

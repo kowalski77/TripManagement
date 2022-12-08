@@ -11,28 +11,25 @@ public abstract class ValueObject
             return false;
         }
 
-        if (this.GetType() != obj.GetType())
+        if (GetType() != obj.GetType())
         {
             return false;
         }
 
-        var valueObject = (ValueObject)obj;
+        ValueObject valueObject = (ValueObject)obj;
 
-        return this.GetEqualityComponents()
+        return GetEqualityComponents()
             .SequenceEqual(valueObject.GetEqualityComponents());
     }
 
-    public override int GetHashCode()
-    {
-        return this.GetEqualityComponents()
+    public override int GetHashCode() => GetEqualityComponents()
             .Aggregate(1, (current, obj) =>
             {
                 unchecked
                 {
-                    return current * 23 + obj.GetHashCode();
+                    return (current * 23) + obj.GetHashCode();
                 }
             });
-    }
 
     public static bool operator ==(ValueObject? a, ValueObject? b)
     {
@@ -41,16 +38,8 @@ public abstract class ValueObject
             return true;
         }
 
-        if (a is null || b is null)
-        {
-            return false;
-        }
-
-        return a.Equals(b);
+        return a is not null && b is not null && a.Equals(b);
     }
 
-    public static bool operator !=(ValueObject? a, ValueObject? b)
-    {
-        return !(a == b);
-    }
+    public static bool operator !=(ValueObject? a, ValueObject? b) => !(a == b);
 }
