@@ -1,5 +1,5 @@
 ﻿namespace TripManagement.Contracts.Models;
 
-public sealed record CreateDraftRequest(Guid UserId, DateTime PickUp, decimal OriginLatitude, decimal OriginLongitude, decimal DestinationLatitude, decimal DestinationLongitude);
+public record struct CreateDraftRequest(Guid UserId, DateTime PickUp, CoordinatesModel Origin, CoordinatesModel Destination);
 
-public sealed record CreateDraftResponse(Guid TripId);
+public record struct CreateDraftResponse(Guid TripId);

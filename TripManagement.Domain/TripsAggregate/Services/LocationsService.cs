@@ -45,7 +45,7 @@ public class LocationsService
         }
         
         Maybe<City> maybeCity = await cityRepository.GetCityByNameAsync(cityName.Value, cancellationToken);
-        if (maybeCity.HasValue)
+        if (maybeCity.HasNoValue)
         {
             return CityErrors.CityNotFoundByName(cityName.Value);
         }

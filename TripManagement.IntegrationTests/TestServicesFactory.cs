@@ -1,6 +1,8 @@
 ﻿using AutoFixture;
+using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using TripManagement.Application;
 using TripManagement.Domain;
 using TripManagement.Domain.Common;
@@ -10,9 +12,34 @@ namespace TripManagement.IntegrationTests;
 
 public sealed class TestServicesFactory : IAsyncLifetime
 {
-    private readonly IServiceProvider serviceProvider;
+    private IServiceScope serviceScope = default!;
 
-    public TestServicesFactory()
+    public TestServicesFactory() => RegisterServices();
+
+    public IFixture Fixture { get; } = new Fixture()
+        .Customize(new TestServicesCustomization());
+
+    public IMediator Mediator => GetService<IMediator>();
+
+    public T GetService<T>() where T : notnull => serviceScope.ServiceProvider.GetRequiredService<T>();
+
+    public Mock<ICoordinatesAgent> CoordinatesAgentMock { get; } = new();
+
+    public async Task InitializeAsync()
+    {
+        TripManagementContext dbContext = GetService<TripManagementContext>();
+
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.EnsureCreatedAsync();
+    }
+
+    public Task DisposeAsync()
+    {
+        serviceScope.Dispose();
+        return Task.CompletedTask;
+    }
+
+    private void RegisterServices()
     {
         IConfigurationRoot config = new ConfigurationBuilder()
             .AddJsonFile($"appsettings.Testing.json", optional: false)
@@ -24,37 +51,9 @@ public sealed class TestServicesFactory : IAsyncLifetime
         services.AddDomainServices();
         services.AddRepositories();
         services.AddSqlPersistence(config.GetConnectionString("IntegrationTestsConnection")!);
-        services.AddScoped<ICoordinatesAgent, CoordinatesAgentSpy>();
+        services.AddScoped(_ => CoordinatesAgentMock.Object);
 
-        this.serviceProvider = services.BuildServiceProvider(true);
-    }
-
-    public IFixture Fixture { get; } = new Fixture();
-
-    public T GetService<T>() where T : notnull
-    {
-        using IServiceScope scope = this.serviceProvider.CreateScope();
-        return scope.ServiceProvider.GetRequiredService<T>();
-    }
-
-    public async Task InitializeAsync()
-    {
-        using IServiceScope scope = this.serviceProvider.CreateScope();
-        TripManagementContext dbContext = scope.ServiceProvider.GetRequiredService<TripManagementContext>();
-        
-        await dbContext.Database.EnsureDeletedAsync();
-        await dbContext.Database.EnsureCreatedAsync();
-    }
-
-    public Task DisposeAsync()
-    {
-        switch (serviceProvider)
-        {
-            case IDisposable disposable:
-                disposable.Dispose();
-                break;
-        }
-
-        return Task.CompletedTask;
+        IServiceProvider serviceProvider = services.BuildServiceProvider();
+        serviceScope = serviceProvider.CreateScope();
     }
 }

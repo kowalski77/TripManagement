@@ -1,11 +1,10 @@
 ﻿using Arch.SharedKernel.Results;
 using AutoFixture;
 using FluentAssertions;
-using MediatR;
+using Moq;
 using TripManagement.Application.Trips.CreateDraft;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.CitiesAggregate;
-using TripManagement.Domain.TripsAggregate.Services;
+using TripManagement.Domain.Common;
 
 namespace TripManagement.IntegrationTests;
 
@@ -15,21 +14,37 @@ public class CreateDraftTests
     private readonly TestServicesFactory factory;
 
     public CreateDraftTests(TestServicesFactory factory)
-	{
+    {
         this.factory = factory;
+        this.factory.DeleteAllTrips();
     }
 
     [Fact]
     public async Task Draft_trip_is_created()
     {
         // Arrange
-        Request request = this.factory.Fixture.Create<Request>();
-        var handler = this.factory.GetService<IRequestHandler<Request, Result<CreateDraftResponse>>>();
+        var city = this.factory.Fixture.Create<string>();
+        await this.factory.AddCityAsync(city);
 
-        //// Act
-        //Result<CreateDraftResponse> result = await handler.Handle(request, CancellationToken.None);
+        this.factory.CoordinatesAgentMock.Setup(x =>
+            x.GetDistanceInKmBetweenCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(10);
 
-        //// Assert
-        //result.Value.Should().NotBeNull();
+        this.factory.CoordinatesAgentMock.Setup(x => 
+            x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(city);
+        
+        this.factory.CoordinatesAgentMock.Setup(x => 
+            x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(this.factory.Fixture.Create<string>());
+
+        Request request = factory.Fixture.Create<Request>();
+
+        // Act
+        Result<CreateDraftResponse> response = await factory.Mediator.Send(request);
+
+        // Assert
+        response.Success.Should().BeTrue();
+        response.Value.Should().NotBe(Guid.Empty);
     }
 }
