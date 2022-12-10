@@ -22,24 +22,18 @@ public class CreateDraftTripTests
     [Fact]
     public async Task Draft_trip_is_created()
     {
-        //// Arrange
-        //var city = factory.Fixture.Create<string>();
+        // Arrange
+        factory.GeocodeAdapterMock.SetupSequence(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(Result.Ok(this.factory.Fixture.CreateOriginLocation()))
+            .ReturnsAsync(Result.Ok(this.factory.Fixture.CreateDestinationLocation()));
 
-        //factory.GeocodeAdapterMock.Setup(x =>
-        //    x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
-        //        .ReturnsAsync(city);
+        Request request = this.factory.Fixture.CreateDraftTripRequest();
 
-        //factory.GeocodeAdapterMock.Setup(x =>
-        //    x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
-        //        .ReturnsAsync(factory.Fixture.Create<string>());
+        // Act
+        Result<CreateDraftResponse> response = await factory.Mediator.Send(request);
 
-        //Request request = this.factory.Fixture.CreateDraftTripRequest();
-
-        //// Act
-        //Result<CreateDraftResponse> response = await factory.Mediator.Send(request);
-
-        //// Assert
-        //response.Success.Should().BeTrue();
-        //response.Value.Should().NotBe(Guid.Empty);
+        // Assert
+        response.Success.Should().BeTrue();
+        response.Value.Should().NotBe(Guid.Empty);
     }
 }

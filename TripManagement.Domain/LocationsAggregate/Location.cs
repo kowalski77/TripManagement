@@ -13,15 +13,16 @@ public sealed class Location : Entity, IAggregateRoot
 {
     private Location() { }
 
-    private Location(Address address, City city, Coordinates coordinates)
+    private Location(Address address, City city, PlaceId placeId, Coordinates coordinates)
     {
         Address = address.NonNull();
         City = city.NonNull();
+        PlaceId = placeId.NonNull();
         Coordinates = coordinates.NonNull();
     }
 
-    public static Location Create(Address address, City city, Coordinates coordinates) =>
-        new(address, city, coordinates);
+    public static Location Create(Address address, City city, PlaceId placeId, Coordinates coordinates) =>
+        new(address, city, placeId, coordinates);
 
     public Guid Id { get; private set; } = Guid.NewGuid();
 
