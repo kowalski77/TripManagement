@@ -1,18 +1,15 @@
 ﻿using Arch.SharedKernel;
+using Arch.SharedKernel.Results;
 using TripManagement.Domain.Common;
+using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.Infrastructure.Agents;
 
 public sealed class FakeGeocodeAdapter : IGeocodeAdapter
 {
-    // TODO: Fake Agent Service, dummy implementations, replace with Google API; since 3rd party agent, handle exceptions and timeouts
-    public Task<Maybe<string>> GetCityByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default) => 
-        coordinates.NonNull().Latitude > 0 ? 
-        Task.FromResult((Maybe<string>)"Barcelona") : 
-        Task.FromResult((Maybe<string>)"Sabadell");
-
-    public Task<Maybe<string>> GetLocationByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default) =>
-        coordinates.NonNull().Latitude > 0 ? 
-        Task.FromResult((Maybe<string>)"Barcelona") : 
-        Task.FromResult((Maybe<string>)"Sabadell");
+    // TODO: Fake Agent Service, dummy implementations, replace with Geocoding.API (simulating Google API) since 3rd party agent, handle exceptions and timeouts
+    public Task<Result<Location>> GetLocationByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default) =>
+        coordinates.NonNull().Latitude > 0 ?
+            Task.FromResult(Result.Ok(Location.Create(new Address("Carrer de la Diputació, 261"), new City("Barcelona"), coordinates))) :
+            Task.FromResult(Result.Ok(Location.Create(new Address("Carrer de la Creu, 14"), new City("Sabadell"), coordinates)));
 }

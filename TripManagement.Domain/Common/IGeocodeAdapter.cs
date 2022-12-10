@@ -1,10 +1,9 @@
-﻿using Arch.SharedKernel;
+﻿using Arch.SharedKernel.Results;
+using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.Domain.Common;
 
 public interface IGeocodeAdapter
 {
-    Task<Maybe<string>> GetCityByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
-
-    Task<Maybe<string>> GetLocationByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
+    Task<Result<Location>> GetLocationByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
 }

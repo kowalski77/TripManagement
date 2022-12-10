@@ -10,6 +10,7 @@ public class LocationEntityTypeConfiguration : IEntityTypeConfiguration<Location
     {
         builder.OwnsOne(x => x.Address, y => y.Property(x => x.Value).HasColumnName("Address"));
         builder.OwnsOne(x => x.PlaceId, y => y.Property(x => x.Value).HasColumnName("PlaceId"));
+        builder.OwnsOne(x => x.City, y => y.Property(x => x.Value).HasColumnName("City"));
         builder.OwnsOne(x => x.Coordinates, y =>
         {
             y.Property(x => x.Latitude).HasColumnName("Latitude");

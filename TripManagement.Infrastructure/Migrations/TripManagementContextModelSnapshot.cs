@@ -181,6 +181,24 @@ namespace TripManagement.Infrastructure.Migrations
                                 .HasForeignKey("LocationId");
                         });
 
+                    b.OwnsOne("TripManagement.Domain.LocationsAggregate.City", "City", b1 =>
+                        {
+                            b1.Property<Guid>("LocationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("City");
+
+                            b1.HasKey("LocationId");
+
+                            b1.ToTable("Location");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LocationId");
+                        });
+
                     b.OwnsOne("TripManagement.Domain.Common.Coordinates", "Coordinates", b1 =>
                         {
                             b1.Property<Guid>("LocationId")
@@ -221,6 +239,9 @@ namespace TripManagement.Infrastructure.Migrations
                         });
 
                     b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("City")
                         .IsRequired();
 
                     b.Navigation("Coordinates")
