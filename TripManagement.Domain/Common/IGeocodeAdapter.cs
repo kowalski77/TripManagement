@@ -2,7 +2,7 @@
 
 namespace TripManagement.Domain.Common;
 
-public interface ICoordinatesAgent
+public interface IGeocodeAdapter
 {
     Task<Maybe<string>> GetCityByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default);
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TripManagement.Domain.TripsAggregate.Services;
+using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.Domain;
 

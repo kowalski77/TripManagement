@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace TripManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -29,17 +27,19 @@ namespace TripManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "City",
+                name: "Location",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PlaceId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.PrimaryKey("PK_Location", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,8 +50,8 @@ namespace TripManagement.Infrastructure.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CarId = table.Column<int>(type: "int", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Latitude = table.Column<double>(type: "float", nullable: true),
+                    Longitude = table.Column<double>(type: "float", nullable: true),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -66,28 +66,6 @@ namespace TripManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Location", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Location_City_CityId",
-                        column: x => x.CityId,
-                        principalTable: "City",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Trips",
                 columns: table => new
                 {
@@ -97,8 +75,8 @@ namespace TripManagement.Infrastructure.Migrations
                     PickUp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     OriginId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DestinationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Latitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Longitude = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
                     TripStatus = table.Column<int>(type: "int", nullable: false),
                     Kilometers = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CreditsCost = table.Column<int>(type: "int", nullable: true),
@@ -127,24 +105,10 @@ namespace TripManagement.Infrastructure.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "City",
-                columns: new[] { "Id", "Active", "Name", "SoftDeleted" },
-                values: new object[,]
-                {
-                    { new Guid("16487808-50bf-480b-a4bf-320e326ffb98"), true, "Barcelona", false },
-                    { new Guid("41846153-8b22-4e1e-93cd-c6ec842cca43"), true, "Sabadell", false }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Driver_CarId",
                 table: "Driver",
                 column: "CarId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Location_CityId",
-                table: "Location",
-                column: "CityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Trips_DestinationId",
@@ -176,9 +140,6 @@ namespace TripManagement.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Car");
-
-            migrationBuilder.DropTable(
-                name: "City");
         }
     }
 }

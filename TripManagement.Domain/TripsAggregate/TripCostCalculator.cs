@@ -1,4 +1,6 @@
-﻿namespace TripManagement.Domain.TripsAggregate;
+﻿using TripManagement.Domain.LocationsAggregate;
+
+namespace TripManagement.Domain.TripsAggregate;
 
 public static class TripCostCalculator
 {

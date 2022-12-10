@@ -4,6 +4,7 @@ using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
 using TripManagement.Domain.Common;
 using TripManagement.Domain.DriversAggregate;
+using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.Domain.TripsAggregate;
 

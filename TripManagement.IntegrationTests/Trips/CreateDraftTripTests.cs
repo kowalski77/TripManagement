@@ -24,13 +24,12 @@ public class CreateDraftTripTests
     {
         // Arrange
         var city = factory.Fixture.Create<string>();
-        await factory.AddCityAsync(city);
 
-        factory.CoordinatesAgentMock.Setup(x =>
+        factory.GeocodeAdapterMock.Setup(x =>
             x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(city);
 
-        factory.CoordinatesAgentMock.Setup(x =>
+        factory.GeocodeAdapterMock.Setup(x =>
             x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(factory.Fixture.Create<string>());
 

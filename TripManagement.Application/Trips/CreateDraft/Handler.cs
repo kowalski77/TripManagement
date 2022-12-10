@@ -2,8 +2,8 @@
 using MediatR;
 using TripManagement.Contracts.Models;
 using TripManagement.Domain.Common;
+using TripManagement.Domain.LocationsAggregate;
 using TripManagement.Domain.TripsAggregate;
-using TripManagement.Domain.TripsAggregate.Services;
 
 namespace TripManagement.Application.Trips.CreateDraft;
 

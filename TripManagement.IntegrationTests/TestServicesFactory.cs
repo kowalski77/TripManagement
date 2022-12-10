@@ -23,7 +23,7 @@ public sealed class TestServicesFactory : IAsyncLifetime
 
     public T GetService<T>() where T : notnull => serviceScope.ServiceProvider.GetRequiredService<T>();
 
-    public Mock<ICoordinatesAgent> CoordinatesAgentMock { get; } = new();
+    public Mock<IGeocodeAdapter> GeocodeAdapterMock { get; } = new();
 
     public async Task InitializeAsync()
     {
@@ -51,7 +51,7 @@ public sealed class TestServicesFactory : IAsyncLifetime
         services.AddDomainServices();
         services.AddRepositories();
         services.AddSqlPersistence(config.GetConnectionString("IntegrationTestsConnection")!);
-        services.AddScoped(_ => CoordinatesAgentMock.Object);
+        services.AddScoped(_ => GeocodeAdapterMock.Object);
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         serviceScope = serviceProvider.CreateScope();

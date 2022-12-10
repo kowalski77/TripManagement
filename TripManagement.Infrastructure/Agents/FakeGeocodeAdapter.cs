@@ -3,7 +3,7 @@ using TripManagement.Domain.Common;
 
 namespace TripManagement.Infrastructure.Agents;
 
-public sealed class FakeCoordinatesAgent : ICoordinatesAgent
+public sealed class FakeGeocodeAdapter : IGeocodeAdapter
 {
     // TODO: Fake Agent Service, dummy implementations, replace with Google API; since 3rd party agent, handle exceptions and timeouts
     public Task<Maybe<string>> GetCityByCoordinatesAsync(Coordinates coordinates, CancellationToken cancellationToken = default) => 
