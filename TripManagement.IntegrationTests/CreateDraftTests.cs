@@ -26,15 +26,22 @@ public class CreateDraftTests
         var city = this.factory.Fixture.Create<string>();
         await this.factory.AddCityAsync(city);
 
-        this.factory.CoordinatesAgentMock.Setup(x => 
+        this.factory.CoordinatesAgentMock.Setup(x =>
             x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(city);
-        
-        this.factory.CoordinatesAgentMock.Setup(x => 
+
+        this.factory.CoordinatesAgentMock.Setup(x =>
             x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(this.factory.Fixture.Create<string>());
 
-        Request request = factory.Fixture.Create<Request>();
+        CreateDraftRequest draftRequest = this.factory.Fixture.Build<CreateDraftRequest>()
+            .With(x => x.OriginLatitude, 41.54)
+            .With(x => x.OriginLongitude, 2.10)
+            .With(x => x.DestinationLatitude, 41.38)
+            .With(x => x.DestinationLongitude, 2.17)
+            .Create();
+        
+        Request request = this.factory.Fixture.Build<Request>().With(x => x.CreateDraft, draftRequest).Create();
 
         // Act
         Result<CreateDraftResponse> response = await factory.Mediator.Send(request);

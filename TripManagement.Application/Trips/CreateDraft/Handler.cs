@@ -22,8 +22,8 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     public async Task<Result<CreateDraftResponse>> Handle(Request request, CancellationToken cancellationToken)
     {
-        var originCoordinates = Coordinates.CreateInstance(request.CreateDraft.Origin.Latitude, request.CreateDraft.Origin.Longitude);
-        var destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.Destination.Latitude, request.CreateDraft.Destination.Longitude);
+        var originCoordinates = Coordinates.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
+        var destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
         var userId = UserId.CreateInstance(request.CreateDraft.UserId);
 
         return (await Result.Init
