@@ -15,7 +15,4 @@ public sealed class FakeCoordinatesAgent : ICoordinatesAgent
         coordinates.NonNull().Latitude > 0 ? 
         Task.FromResult((Maybe<string>)"Barcelona") : 
         Task.FromResult((Maybe<string>)"Sabadell");
-
-    public Task<int> GetDistanceInKmBetweenCoordinatesAsync(Coordinates origin, Coordinates destination, CancellationToken cancellationToken = default) =>
-        Task.FromResult(5);
 }

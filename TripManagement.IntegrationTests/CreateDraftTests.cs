@@ -26,10 +26,6 @@ public class CreateDraftTests
         var city = this.factory.Fixture.Create<string>();
         await this.factory.AddCityAsync(city);
 
-        this.factory.CoordinatesAgentMock.Setup(x =>
-            x.GetDistanceInKmBetweenCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(10);
-
         this.factory.CoordinatesAgentMock.Setup(x => 
             x.GetCityByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(city);
