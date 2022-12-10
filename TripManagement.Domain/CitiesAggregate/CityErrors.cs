@@ -6,14 +6,14 @@ namespace TripManagement.Domain.CitiesAggregate;
 
 public static class CityErrors
 {
-    public static ErrorResult CityNotFoundByCoordinates(Coordinates coordinates) => new(
-            CityErrorConstants.CityNameNotFoundByCoordinatesCode,
-            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.CityNameNotFoundByCoordinatesMessage, coordinates.Latitude, coordinates.Longitude));
+    public static ErrorResult CityNotFoundWithCoordinates(Coordinates coordinates) => new(
+            CityErrorConstants.CityNameNotFoundWithCoordinatesCode,
+            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.CityNameNotFoundWithCoordinatesMessage, coordinates.Latitude, coordinates.Longitude));
 
 
-    public static ErrorResult CityNotFoundByName(string name) => new(
-            CityErrorConstants.CityNameNotFoundCode,
-            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.CityNameNotFoundMessage, name));
+    public static ErrorResult CityNotAvailable(string name) => new(
+            CityErrorConstants.CityNotAvailableCode,
+            string.Format(CultureInfo.InvariantCulture, CityErrorConstants.CityNotAvailableMessage, name));
 
     public static ErrorResult CityNameNullOrEmpty() => new(
         CityErrorConstants.CityNameNullOrEmptyCode,

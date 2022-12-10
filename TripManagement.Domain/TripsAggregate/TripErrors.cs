@@ -24,11 +24,11 @@ public static class TripErrors
             TripErrorConstants.InvalidateFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.InvalidateFailedMessage, status.ToString()));
 
-    public static ErrorResult LocationNotFoundByCoordinates(Coordinates coordinates) => new(
-            TripErrorConstants.LocationNotFoundByCoordinatesCode,
+    public static ErrorResult LocationNotFoundWithCoordinates(Coordinates coordinates) => new(
+            TripErrorConstants.LocationNotFoundWithCoordinatesCode,
             string.Format(
                 CultureInfo.InvariantCulture,
-                TripErrorConstants.LocationNotFoundByCoordinatesMessage,
+                TripErrorConstants.LocationNotFoundWithCoordinatesMessage,
                 coordinates.Latitude,
                 coordinates.Longitude));
 }

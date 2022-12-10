@@ -6,11 +6,11 @@ public static class CityErrorConstants
 
     public const string CityNameNullOrEmptyMessage = "the city name is null or empty";
 
-    public const string CityNameNotFoundByCoordinatesCode = "cityname.not.found.by.coordinates";
+    public const string CityNameNotFoundWithCoordinatesCode = "cityname.not.found.with.coordinates";
 
-    public const string CityNameNotFoundByCoordinatesMessage = "could not find city with coordinates {0} and {1} through Agent";
+    public const string CityNameNotFoundWithCoordinatesMessage = "could not find city with coordinates {0} and {1}";
 
-    public const string CityNameNotFoundCode = "cityname.not.found";
+    public const string CityNotAvailableCode = "city.not.available";
 
-    public const string CityNameNotFoundMessage = "could not find city with the name {0} in database";
+    public const string CityNotAvailableMessage = "city with name {0} not available in the system";
 }

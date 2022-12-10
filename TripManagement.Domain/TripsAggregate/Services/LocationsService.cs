@@ -33,27 +33,22 @@ public class LocationsService
 
     private async Task<Result<Location>> CreateAsync(Coordinates coordinates, CancellationToken cancellationToken = default)
     {
-        Task<Maybe<string>> maybeCityNameTask = coordinatesAgent.GetCityByCoordinatesAsync(coordinates, cancellationToken);
-        Task<Maybe<string>> maybeLocationNameTask = coordinatesAgent.GetLocationByCoordinatesAsync(coordinates, cancellationToken);
-
-        await Task.WhenAll(maybeCityNameTask, maybeLocationNameTask);
-
-        Maybe<string> cityName = await maybeCityNameTask;
-        if (cityName.HasNoValue)
+        Maybe<string> maybeCityName = await coordinatesAgent.GetCityByCoordinatesAsync(coordinates, cancellationToken);
+        if (maybeCityName.HasNoValue)
         {
-            return CityErrors.CityNotFoundByCoordinates(coordinates);
+            return CityErrors.CityNotFoundWithCoordinates(coordinates);
         }
         
-        Maybe<City> maybeCity = await cityRepository.GetCityByNameAsync(cityName.Value, cancellationToken);
+        Maybe<City> maybeCity = await cityRepository.GetCityByNameAsync(maybeCityName.Value, cancellationToken);
         if (maybeCity.HasNoValue)
         {
-            return CityErrors.CityNotFoundByName(cityName.Value);
+            return CityErrors.CityNotAvailable(maybeCityName.Value);
         }
 
-        Maybe<string> maybeLocationName = await maybeLocationNameTask;
+        Maybe<string> maybeLocationName = await coordinatesAgent.GetLocationByCoordinatesAsync(coordinates, cancellationToken);
         if (maybeLocationName.HasNoValue)
         {
-            return TripErrors.LocationNotFoundByCoordinates(coordinates);
+            return TripErrors.LocationNotFoundWithCoordinates(coordinates);
         }
 
         return Location.Create(
