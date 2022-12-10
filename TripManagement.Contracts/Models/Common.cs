@@ -1,2 +1,2 @@
 ﻿
-public record struct CoordinatesModel(decimal Latitude, decimal Longitude);
+public record struct CoordinatesModel(double Latitude, double Longitude);

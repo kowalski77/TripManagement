@@ -4,7 +4,6 @@ using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
 using TripManagement.Domain.Common;
 using TripManagement.Domain.DriversAggregate;
-using TripManagement.Domain.TripsAggregate.Exceptions;
 
 namespace TripManagement.Domain.TripsAggregate;
 
@@ -14,7 +13,7 @@ public sealed class Trip : Entity, IAggregateRoot
 
     private Trip() { }
 
-    public Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
+    private Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
     {
         this.Id = Id;
         UserId = userId.NonNull();
@@ -28,10 +27,10 @@ public sealed class Trip : Entity, IAggregateRoot
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
     }
 
-    public Trip(Trip trip) 
-        : this(trip.Id, trip.UserId, trip.PickUp, trip.Origin, trip.Destination)
-    {
-    }
+    public static Result<Trip> Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination) =>
+        origin.Coordinates.DistanceInKilometersTo(destination.Coordinates) < MinimumDistanceBetweenLocations ?
+            TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations) :
+            new Trip(id, userId, pickUp, origin, destination);
 
     public Guid Id { get; private set; }
 
@@ -52,11 +51,6 @@ public sealed class Trip : Entity, IAggregateRoot
     public decimal Kilometers { get; private set; }
 
     public int? CreditsCost { get; private init; }
-
-    public static Result ValidateDistance(int kilomenters) => 
-        kilomenters >= MinimumDistanceBetweenLocations ?
-            Result.Ok() :
-            TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations);
 
     //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
     //        Result.Ok() :

@@ -5,22 +5,22 @@ namespace TripManagement.Domain.Common;
 
 public sealed class Coordinates : ValueObject
 {
-    private const decimal MinLatitude = -90;
-    private const decimal MaxLatitude = 90;
-    private const decimal MinLongitude = -180;
-    private const decimal MaxLongitude = 180;
+    private const double MinLatitude = -90;
+    private const double MaxLatitude = 90;
+    private const double MinLongitude = -180;
+    private const double MaxLongitude = 180;
 
-    private Coordinates(decimal latitude, decimal longitude)
+    private Coordinates(double latitude, double longitude)
     {
         this.Latitude = latitude;
         this.Longitude = longitude;
     }
 
-    public decimal Latitude { get; private set; }
+    public double Latitude { get; private set; }
 
-    public decimal Longitude { get; private set; }
+    public double Longitude { get; private set; }
 
-    public static Result<Coordinates> CreateInstance(decimal latitude, decimal longitude)
+    public static Result<Coordinates> CreateInstance(double latitude, double longitude)
     {
         if (latitude is < MinLatitude or > MaxLatitude)
         {

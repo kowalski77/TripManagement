@@ -13,13 +13,11 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 {
     private readonly LocationsService locationsService;
     private readonly ITripsRepository tripRepository;
-    private readonly ICoordinatesAgent coordinatesAgent;
 
-    public Handler(LocationsService locationsService, ITripsRepository tripRepository, ICoordinatesAgent coordinatesAgent)
+    public Handler(LocationsService locationsService, ITripsRepository tripRepository)
     {
         this.locationsService = locationsService;
         this.tripRepository = tripRepository;
-        this.coordinatesAgent = coordinatesAgent;
     }
 
     public async Task<Result<CreateDraftResponse>> Handle(Request request, CancellationToken cancellationToken)
@@ -28,25 +26,20 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
         var destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.Destination.Latitude, request.CreateDraft.Destination.Longitude);
         var userId = UserId.CreateInstance(request.CreateDraft.UserId);
 
-        return await Result.Init
+        return (await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
-            .OnSuccess(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken))
-            .OnSuccess(trip => new CreateDraftResponse(trip.Id));
+            .OnSuccess(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken)))
+            .Map(x=> new CreateDraftResponse(x.Id));
     }
 
-    private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken)
-    {
-        var distanceInKmResult = await coordinatesAgent.GetDistanceInKmBetweenCoordinatesAsync(origin, destination, cancellationToken);
-
-        return await Trip.ValidateDistance(distanceInKmResult)
-            .OnSuccess(async () => await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken))
-            .OnSuccess(async locations =>
+    private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
+        await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
+            .OnSuccess(locations => Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination))
+            .OnSuccess(async trip =>
             {
-                Trip trip = new(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination);
                 tripRepository.Add(trip);
                 await tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
                 return trip;
             });
-    }
 }

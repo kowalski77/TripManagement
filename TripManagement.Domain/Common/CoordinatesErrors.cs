@@ -6,7 +6,7 @@ namespace TripManagement.Domain.Common;
 
 public static class CoordinatesErrors
 {
-    public static ErrorResult OutOfRangeCoordinates(string argument, decimal min, decimal max) => new(
+    public static ErrorResult OutOfRangeCoordinates(string argument, double min, double max) => new(
             CoordinatesErrorConstants.OutOfRangeCoordinatesCode,
             string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.OutOfRangeCoordinatesMessage, argument, min, max));
 
