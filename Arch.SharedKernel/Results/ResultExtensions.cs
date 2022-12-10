@@ -2,26 +2,12 @@
 
 public static class ResultExtensions
 {
-    public static async Task<Result> OnSuccess(this Result result, Func<Task<Result>> func) =>
+    public static async Task<Result<T>> Do<T>(this Result result, Func<Task<Result<T>>> func) =>
         result.NonNull().Success ?
             await func().NonNull().ConfigureAwait(false)
             : result.Error!;
 
-    public static async Task<Result<(T, TK)>> OnSuccess<T, TK>(this Task<Result> result, Func<Task<Result<(T, TK)>>> func)
-    {
-        Result awaitedResult = await result.NonNull().ConfigureAwait(false);
-
-        return awaitedResult.Success ?
-            await func().NonNull().ConfigureAwait(false) :
-            awaitedResult.Error!;
-    }
-
-    public static async Task<Result<T>> OnSuccess<T>(this Result result, Func<Task<Result<T>>> func) =>
-        result.NonNull().Success ?
-            await func().NonNull().ConfigureAwait(false)
-            : result.Error!;
-
-    public static async Task<Result<TR>> OnSuccess<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
+    public static async Task<Result<TR>> Do<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
 
@@ -29,30 +15,12 @@ public static class ResultExtensions
             mapper.NonNull()(awaitedResult.Value) :
             awaitedResult.Error!;
     }
-    public static Result<TR> OnSuccess<T, TR>(this Result<T> result, Func<T, Result<TR>> func) =>
-        result.Success ?
-            func.NonNull()(result.Value) :
-            result.Error!;
 
-    public static async Task<Result<TR>> OnSuccess<T, TR>(this Result<T> result, Func<T, Task<TR>> func) =>
-        result.Success ?
-            await func.NonNull()(result.Value).NonNull().ConfigureAwait(false) :
-            result.Error!;
-
-    public static async Task<Result<TR>> OnSuccess<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
+    public static async Task<Result<TR>> Do<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
         return awaitedResult.Success ?
             await func(awaitedResult.Value) :
-            awaitedResult.Error!;
-    }
-
-    public static async Task<Result> OnSuccess<T>(this Task<Result<T>> result, Func<T, Task<Result>> func)
-    {
-        Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
-
-        return awaitedResult.Success ?
-            await func.NonNull()(awaitedResult.Value).ConfigureAwait(false) :
             awaitedResult.Error!;
     }
 

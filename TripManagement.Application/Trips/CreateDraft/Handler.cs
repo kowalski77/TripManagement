@@ -28,14 +28,14 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
         return (await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
-            .OnSuccess(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken)))
+            .Do(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken)))
             .Map(x=> new CreateDraftResponse(x.Id));
     }
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
-            .OnSuccess(locations => Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination))
-            .OnSuccess(async trip =>
+            .Do(locations => Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination))
+            .Do(async trip =>
             {
                 tripRepository.Add(trip);
                 await tripRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
