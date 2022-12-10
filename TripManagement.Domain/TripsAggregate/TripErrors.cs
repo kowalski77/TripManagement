@@ -6,45 +6,29 @@ namespace TripManagement.Domain.TripsAggregate;
 
 public static class TripErrors
 {
-    public static ErrorResult DriverAssignedFailed(TripStatus status)
-    {
-        return new ErrorResult(
+    public static ErrorResult DriverAssignedFailed(TripStatus status) => new(
             TripErrorConstants.DriverAssignFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.DriverAssignFailedMessage, status.ToString()));
-    }
 
-    public static ErrorResult MinimumDistanceBetweenLocations(decimal distance)
-    {
-        return new ErrorResult(
-            TripErrorConstants.MinimumDistanceBetweenLocationsCode,
+    public static ErrorResult DistanceBetweenLocations(int minDistance, int maxDistance) => new(
+            TripErrorConstants.DistanceBetweenLocationsCode,
             string.Format(
                 CultureInfo.InvariantCulture,
-                TripErrorConstants.MinimumDistanceBetweenLocationsMessage,
-                distance.ToString(CultureInfo.InvariantCulture)));
-    }
+                TripErrorConstants.DistanceBetweenLocationsMessage, minDistance, maxDistance));
 
-    public static ErrorResult ConfirmFailed(TripStatus status)
-    {
-        return new ErrorResult(
+    public static ErrorResult ConfirmFailed(TripStatus status) => new(
             TripErrorConstants.ConfirmFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.ConfirmFailedMessage, status.ToString()));
-    }
 
-    public static ErrorResult InvalidateFailed(TripStatus status)
-    {
-        return new ErrorResult(
+    public static ErrorResult InvalidateFailed(TripStatus status) => new(
             TripErrorConstants.InvalidateFailedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.InvalidateFailedMessage, status.ToString()));
-    }
 
-    public static ErrorResult LocationNotFoundByCoordinates(Coordinates coordinates)
-    {
-        return new ErrorResult(
+    public static ErrorResult LocationNotFoundByCoordinates(Coordinates coordinates) => new(
             TripErrorConstants.LocationNotFoundByCoordinatesCode,
             string.Format(
                 CultureInfo.InvariantCulture,
                 TripErrorConstants.LocationNotFoundByCoordinatesMessage,
-                coordinates.Latitude.ToString(CultureInfo.InvariantCulture),
-                coordinates.Longitude.ToString(CultureInfo.InvariantCulture)));
-    }
+                coordinates.Latitude,
+                coordinates.Longitude));
 }

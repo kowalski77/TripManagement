@@ -9,7 +9,8 @@ namespace TripManagement.Domain.TripsAggregate;
 
 public sealed class Trip : Entity, IAggregateRoot
 {
-    private const decimal MinimumDistanceBetweenLocations = 1;
+    private const int MinimumDistanceBetweenLocations = 1;
+    private const int MaximumDistanceBetweenLocations = 100;
 
     private Trip() { }
 
@@ -28,8 +29,10 @@ public sealed class Trip : Entity, IAggregateRoot
     }
 
     public static Result<Trip> Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination) =>
-        origin.Coordinates.DistanceInKilometersTo(destination.Coordinates) < MinimumDistanceBetweenLocations ?
-            TripErrors.MinimumDistanceBetweenLocations(MinimumDistanceBetweenLocations) :
+        origin.Coordinates.DistanceInKilometersTo(destination.Coordinates) is 
+        < MinimumDistanceBetweenLocations or 
+        > MaximumDistanceBetweenLocations ?
+            TripErrors.DistanceBetweenLocations(MinimumDistanceBetweenLocations, MaximumDistanceBetweenLocations) :
             new Trip(id, userId, pickUp, origin, destination);
 
     public Guid Id { get; private set; }
