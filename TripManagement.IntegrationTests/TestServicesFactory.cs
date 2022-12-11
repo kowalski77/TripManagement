@@ -48,7 +48,7 @@ public sealed class TestServicesFactory : IAsyncLifetime
 
         ServiceCollection services = new();
         services.AddApplicationServices();
-        services.AddDomainServices();
+        services.AddDomainServices(config);
         services.AddRepositories();
         services.AddSqlPersistence(config.GetConnectionString("IntegrationTestsConnection")!);
         services.AddScoped(_ => GeocodeAdapterMock.Object);

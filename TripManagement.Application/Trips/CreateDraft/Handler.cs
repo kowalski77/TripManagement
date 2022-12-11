@@ -1,5 +1,6 @@
 ﻿using Arch.SharedKernel.Results;
 using MediatR;
+using Microsoft.Extensions.Options;
 using TripManagement.Contracts.Models;
 using TripManagement.Domain.Common;
 using TripManagement.Domain.LocationsAggregate;
@@ -15,9 +16,9 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
     private readonly LocationsService locationsService;
     private readonly ITripsRepository tripRepository;
 
-    public Handler(TripOptions tripOptions, LocationsService locationsService, ITripsRepository tripRepository)
+    public Handler(IOptions<TripOptions> tripOptions, LocationsService locationsService, ITripsRepository tripRepository)
     {
-        this.tripOptions = tripOptions;
+        this.tripOptions = tripOptions.Value;
         this.locationsService = locationsService;
         this.tripRepository = tripRepository;
     }
@@ -36,11 +37,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
-            .Do(locations =>
-            {
-                Trip trip = Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination);
-                return trip.Validate(this.tripOptions).Return(() => trip);
-            })
+            .Do(locations => Trip.CreateDraft(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, this.tripOptions))
             .Do(async trip =>
             {
                 tripRepository.Add(trip);

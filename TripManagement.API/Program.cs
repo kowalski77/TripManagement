@@ -8,7 +8,7 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
-builder.Services.AddDomainServices();
+builder.Services.AddDomainServices(builder.Configuration);
 builder.Services.AddInfrastructure(builder.Configuration);
 
 WebApplication app = builder.Build();

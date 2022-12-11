@@ -1,5 +1,4 @@
 ﻿#pragma warning disable 8618
-using System.Runtime.CompilerServices;
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
@@ -48,10 +47,15 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public int? CreditsCost { get; private init; }
 
-    public static Trip Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination) => 
-        new(id, userId, pickUp, origin, destination);
+    public static Result<Trip> CreateDraft(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options)
+    {
+        Result result = Validate(origin, destination, options);
+        return result.Success? 
+            new Trip(id, userId, pickUp, origin, destination) : 
+            result.Error!;
+    }
 
-    public Result Validate(TripOptions options) => (this.Origin, this.Destination, options) switch
+    private static Result Validate(Location origin, Location destination, TripOptions options) => (origin, destination, options) switch
     {
         (var o, var d, var opt) when o.Coordinates.DistanceInKilometersTo(d.Coordinates) < opt.MinDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),
         (var o, var d, var opt) when o.Coordinates.DistanceInKilometersTo(d.Coordinates) > opt.MaxDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),

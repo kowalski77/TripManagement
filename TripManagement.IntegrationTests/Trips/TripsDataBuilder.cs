@@ -25,17 +25,25 @@ public static class TripsDataBuilder
         return fixture.Build<Request>().With(x => x.CreateDraft, createDraftRequest).Create();
     }
 
-    public static Location CreateOriginLocation(this IFixture fixture) =>
-        Location.Create(
+    public static Location CreateOriginLocation(this IFixture fixture)
+    {
+        fixture.Customize<City>(x => x.With(y => y.Value, "Sabadell"));
+
+        return Location.Create(
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
             Coordinates.CreateInstance(CityOneLatitude, CityOneLongitude).Value);
+    }
 
-    public static Location CreateDestinationLocation(this IFixture fixture) =>
-        Location.Create(
+    public static Location CreateDestinationLocation(this IFixture fixture)
+    {
+        fixture.Customize<City>(x => x.With(y => y.Value, "Barcelona"));
+        
+        return Location.Create(
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
             Coordinates.CreateInstance(CityTwoLatitude, CityTwoLongitude).Value);
+    }
 }
