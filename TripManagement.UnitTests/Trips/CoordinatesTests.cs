@@ -14,10 +14,10 @@ public class CoordinatesTests
         Coordinates destination = Coordinates.CreateInstance(41.38, 2.17).Value;
 
         // Act
-        var distance = origin.DistanceInKilometersTo(destination);
+        Kilometers kilometers = origin.DistanceInKilometersTo(destination);
 
         // Assert
-        distance.Should().Be(expectedDistance);
+        kilometers.Value.Should().Be(expectedDistance);
     }
 
     [Fact]
@@ -28,9 +28,9 @@ public class CoordinatesTests
         Coordinates destination = Coordinates.CreateInstance(41.54, 2.10).Value;
 
         // Act
-        var distance = origin.DistanceInKilometersTo(destination);
+        Kilometers kilometers = origin.DistanceInKilometersTo(destination);
 
         // Assert
-        distance.Should().Be(0);
+        kilometers.Value.Should().Be(0);
     }
 }
