@@ -2,12 +2,12 @@
 
 public static class ResultExtensions
 {
-    public static async Task<Result<T>> Do<T>(this Result result, Func<Task<Result<T>>> func) =>
+    public static async Task<Result<T>> Act<T>(this Result result, Func<Task<Result<T>>> func) =>
         result.NonNull().Success ?
             await func().NonNull().ConfigureAwait(false)
             : result.Error!;
 
-    public static async Task<Result<TR>> Do<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
+    public static async Task<Result<TR>> Act<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
 
@@ -16,18 +16,13 @@ public static class ResultExtensions
             awaitedResult.Error!;
     }
 
-    public static async Task<Result<TR>> Do<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
+    public static async Task<Result<TR>> Act<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
         return awaitedResult.Success ?
             await func(awaitedResult.Value) :
             awaitedResult.Error!;
     }
-
-    public static Result<T> Return<T>(this Result result, Func<T> func) =>
-        result.NonNull().Success ?
-            func.NonNull()() :
-            result.Error!;
 
     public static Result Validate(this Result _, params Result[] results)
     {
