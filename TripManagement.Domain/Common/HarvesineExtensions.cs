@@ -6,6 +6,8 @@ public static class HarvesineExtensions
 
     public static Kilometers ToKilometers(this Distance c) => new((int)(EarthRadius * c.Value));
 
+    public static Milles ToMilles(this Distance c) => new((int)(EarthRadius * c.Value * 0.621371));
+
     public static Distance CalculateDistanceTo(this Coordinates origin, Coordinates destination)
     {
         var latitude = new Degrees(destination.Latitude - origin.Latitude).ToRadians().Value;

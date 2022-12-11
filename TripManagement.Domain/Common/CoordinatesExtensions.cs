@@ -2,6 +2,6 @@
 
 public static class CoordinatesExtensions
 {
-    public static Kilometers DistanceInKilometersTo(this Coordinates origin, Coordinates destination) =>
+    public static Kilometers DistanceTo(this Coordinates origin, Coordinates destination) =>
         origin.CalculateDistanceTo(destination).ToKilometers();
-}
+} 
