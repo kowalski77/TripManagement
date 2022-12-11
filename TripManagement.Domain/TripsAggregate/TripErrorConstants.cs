@@ -19,4 +19,7 @@ public static class TripErrorConstants
 
     public const string LocationNotFoundWithCoordinatesCode = "location.not.found.with.coordinates";
     public const string LocationNotFoundWithCoordinatesMessage = "Location not found with coordinates {0} {1}";
+
+    public const string CityNotAllowedCode = "city.not.allowed";
+    public const string CityNotAllowedMessage = "City {0} is not allowed";
 }

@@ -1,5 +1,4 @@
 ﻿using Arch.SharedKernel.Results;
-using AutoFixture;
 using FluentAssertions;
 using Moq;
 using TripManagement.Application.Trips.CreateDraft;

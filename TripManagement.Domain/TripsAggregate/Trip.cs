@@ -1,4 +1,5 @@
 ﻿#pragma warning disable 8618
+using System.Runtime.CompilerServices;
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
@@ -10,8 +11,6 @@ namespace TripManagement.Domain.TripsAggregate;
 
 public sealed class Trip : Entity, IAggregateRoot
 {
-    private const int MinimumDistanceBetweenLocations = 1;
-    private const int MaximumDistanceBetweenLocations = 100;
 
     private Trip() { }
 
@@ -28,13 +27,6 @@ public sealed class Trip : Entity, IAggregateRoot
 
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
     }
-
-    public static Result<Trip> Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination) =>
-        origin.Coordinates.DistanceInKilometersTo(destination.Coordinates) is 
-        < MinimumDistanceBetweenLocations or 
-        > MaximumDistanceBetweenLocations ?
-            TripErrors.DistanceBetweenLocations(MinimumDistanceBetweenLocations, MaximumDistanceBetweenLocations) :
-            new Trip(id, userId, pickUp, origin, destination);
 
     public Guid Id { get; private set; }
 
@@ -55,6 +47,18 @@ public sealed class Trip : Entity, IAggregateRoot
     public decimal Kilometers { get; private set; }
 
     public int? CreditsCost { get; private init; }
+
+    public static Trip Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination) => 
+        new(id, userId, pickUp, origin, destination);
+
+    public Result Validate(TripOptions options) => (this.Origin, this.Destination, options) switch
+    {
+        (var o, var d, var opt) when o.Coordinates.DistanceInKilometersTo(d.Coordinates) < opt.MinDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),
+        (var o, var d, var opt) when o.Coordinates.DistanceInKilometersTo(d.Coordinates) > opt.MaxDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),
+        (var o, _, var opt) when !opt.AllowedCities.Contains(o.City.Value) => TripErrors.CityNotAllowed(o.City.Value),
+        (_, var d, var opt) when !opt.AllowedCities.Contains(d.City.Value) => TripErrors.CityNotAllowed(d.City.Value),
+        _ => Result.Ok()
+    };
 
     //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
     //        Result.Ok() :

@@ -1,13 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<AnalysisMode>all</AnalysisMode>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Arch.SharedKernel\Arch.SharedKernel.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Arch.SharedKernel\Arch.SharedKernel.csproj" />
+	</ItemGroup>
 
 </Project>

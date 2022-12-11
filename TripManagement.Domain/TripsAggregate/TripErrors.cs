@@ -31,4 +31,8 @@ public static class TripErrors
                 TripErrorConstants.LocationNotFoundWithCoordinatesMessage,
                 coordinates.Latitude,
                 coordinates.Longitude));
+
+    public static ErrorResult CityNotAllowed(string city) => new(
+            TripErrorConstants.CityNotAllowedCode,
+            string.Format(CultureInfo.InvariantCulture, TripErrorConstants.CityNotAllowedMessage, city));
 }

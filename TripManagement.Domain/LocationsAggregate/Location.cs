@@ -5,10 +5,6 @@ using TripManagement.Domain.Common;
 
 namespace TripManagement.Domain.LocationsAggregate;
 
-public record Address(string Value);
-public record PlaceId(string Value);
-public record City(string Value);
-
 public sealed class Location : Entity, IAggregateRoot
 {
     private Location() { }
@@ -34,3 +30,7 @@ public sealed class Location : Entity, IAggregateRoot
 
     public Coordinates Coordinates { get; private set; }
 }
+
+public record Address(string Value);
+public record PlaceId(string Value);
+public record City(string Value);

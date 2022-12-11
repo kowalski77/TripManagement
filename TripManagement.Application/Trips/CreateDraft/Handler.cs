@@ -11,11 +11,13 @@ public sealed record Request(CreateDraftRequest CreateDraft) : IRequest<Result<C
 
 public sealed class Handler : IRequestHandler<Request, Result<CreateDraftResponse>>
 {
+    private readonly TripOptions tripOptions;
     private readonly LocationsService locationsService;
     private readonly ITripsRepository tripRepository;
 
-    public Handler(LocationsService locationsService, ITripsRepository tripRepository)
+    public Handler(TripOptions tripOptions, LocationsService locationsService, ITripsRepository tripRepository)
     {
+        this.tripOptions = tripOptions;
         this.locationsService = locationsService;
         this.tripRepository = tripRepository;
     }
@@ -34,7 +36,11 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
-            .Do(locations => Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination))
+            .Do(locations =>
+            {
+                Trip trip = Trip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination);
+                return trip.Validate(this.tripOptions).Return(() => trip);
+            })
             .Do(async trip =>
             {
                 tripRepository.Add(trip);

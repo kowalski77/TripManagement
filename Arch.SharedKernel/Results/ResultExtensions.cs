@@ -24,6 +24,11 @@ public static class ResultExtensions
             awaitedResult.Error!;
     }
 
+    public static Result<T> Return<T>(this Result result, Func<T> func) =>
+        result.NonNull().Success ?
+            func.NonNull()() :
+            result.Error!;
+
     public static Result Validate(this Result _, params Result[] results)
     {
         List<ErrorResult> errorCollection = (from result in results
