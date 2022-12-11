@@ -32,7 +32,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
         return (await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
             .Act(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken)))
-            .Map(x=> new CreateDraftResponse(x.Id));
+            .Map(trip => new CreateDraftResponse(trip.Id));
     }
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
