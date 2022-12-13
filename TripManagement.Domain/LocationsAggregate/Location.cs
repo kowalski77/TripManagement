@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 8618
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
-using TripManagement.Domain.Common;
+using TripManagement.Domain.Models.Coordinates;
 
 namespace TripManagement.Domain.LocationsAggregate;
 

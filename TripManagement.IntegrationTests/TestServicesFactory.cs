@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using TripManagement.Application;
 using TripManagement.Domain;
-using TripManagement.Domain.Common;
 using TripManagement.Infrastructure.Persistence;
 
 namespace TripManagement.IntegrationTests;

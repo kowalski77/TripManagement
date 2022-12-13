@@ -1,7 +1,7 @@
 ﻿using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
 
-namespace TripManagement.Domain.Common;
+namespace TripManagement.Domain.Models.Coordinates;
 
 public sealed class Coordinates : ValueObject
 {
@@ -12,8 +12,8 @@ public sealed class Coordinates : ValueObject
 
     private Coordinates(double latitude, double longitude)
     {
-        this.Latitude = latitude;
-        this.Longitude = longitude;
+        Latitude = latitude;
+        Longitude = longitude;
     }
 
     public double Latitude { get; private set; }
@@ -37,7 +37,7 @@ public sealed class Coordinates : ValueObject
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
-        yield return this.Latitude;
-        yield return this.Longitude;
+        yield return Latitude;
+        yield return Longitude;
     }
 }

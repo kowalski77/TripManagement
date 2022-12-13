@@ -1,11 +1,10 @@
-﻿namespace TripManagement.Domain.Common;
+﻿using TripManagement.Domain.Models.Types;
 
-public static class CoordinatesExtensions
+namespace TripManagement.Domain.Models.Coordinates;
+
+internal static class Harvesine
 {
-    public static Kilometers DistanceTo(this Coordinates origin, Coordinates destination) =>
-        origin.CalculateDistanceTo(destination).ToKilometers();
-
-    private static Distance CalculateDistanceTo(this Coordinates origin, Coordinates destination)
+    public static Distance CalculateDistanceTo(this Coordinates origin, Coordinates destination)
     {
         Radians latitude = new Degrees(destination.Latitude - origin.Latitude).ToRadians();
         Radians longitude = new Degrees(destination.Longitude - origin.Longitude).ToRadians();
@@ -16,4 +15,4 @@ public static class CoordinatesExtensions
 
         return new Distance(2 * Math.Asin(Math.Sqrt(value)));
     }
-} 
+}

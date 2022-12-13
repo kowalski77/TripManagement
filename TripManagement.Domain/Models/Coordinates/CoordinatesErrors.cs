@@ -2,7 +2,7 @@
 using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 
-namespace TripManagement.Domain.Common;
+namespace TripManagement.Domain.Models.Coordinates;
 
 public static class CoordinatesErrors
 {

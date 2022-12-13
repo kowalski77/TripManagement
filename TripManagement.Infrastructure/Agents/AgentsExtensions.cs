@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using TripManagement.Domain.Common;
+using TripManagement.Domain;
 
 namespace TripManagement.Infrastructure.Agents;
 
