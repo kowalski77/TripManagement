@@ -10,7 +10,6 @@ namespace TripManagement.Domain.TripsAggregate;
 
 public sealed class Trip : Entity, IAggregateRoot
 {
-    
     private Trip() { }
 
     private Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
@@ -49,20 +48,11 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public static Result<Trip> CreateDraft(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options)
     {
-        Result result = Validate(origin, destination, options);
-        return result.Success? 
-            new Trip(id, userId, pickUp, origin, destination) : 
+        Result result = TripExtensions.Validate(origin, destination, options);
+        return result.Success ?
+            new Trip(id, userId, pickUp, origin, destination) :
             result.Error!;
     }
-
-    private static Result Validate(Location origin, Location destination, TripOptions options) => (origin, destination, options) switch
-    {
-        (var o, var d, var opt) when o.Coordinates.DistanceTo(d.Coordinates).Value < opt.MinDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),
-        (var o, var d, var opt) when o.Coordinates.DistanceTo(d.Coordinates).Value > opt.MaxDistanceBetweenLocations => TripErrors.DistanceBetweenLocations(opt.MinDistanceBetweenLocations, opt.MaxDistanceBetweenLocations),
-        (var o, _, var opt) when !opt.AllowedCities.Contains(o.City.Value) => TripErrors.CityNotAllowed(o.City.Value),
-        (_, var d, var opt) when !opt.AllowedCities.Contains(d.City.Value) => TripErrors.CityNotAllowed(d.City.Value),
-        _ => Result.Ok()
-    };
 
     //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
     //        Result.Ok() :
