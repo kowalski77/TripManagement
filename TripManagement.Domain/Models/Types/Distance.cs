@@ -1,4 +1,4 @@
-﻿namespace TripManagement.Domain.Models.Types;
+﻿ namespace TripManagement.Domain.Models.Types;
 
 public record struct Kilometers(Distance Distance, double Value);
 
