@@ -12,7 +12,7 @@ using TripManagement.Infrastructure.Persistence;
 namespace TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20221218105750_Initial")]
+    [Migration("20221218120021_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -75,20 +75,6 @@ namespace TripManagement.Infrastructure.Migrations
                     b.ToTable("Driver");
                 });
 
-            modelBuilder.Entity("TripManagement.Domain.LocationsAggregate.Location", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("SoftDeleted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Location");
-                });
-
             modelBuilder.Entity("TripManagement.Domain.TripsAggregate.Trip", b =>
                 {
                     b.Property<Guid>("Id")
@@ -124,6 +110,17 @@ namespace TripManagement.Infrastructure.Migrations
                     b.ToTable("Trips");
                 });
 
+            modelBuilder.Entity("TripManagement.Domain.Types.Locations.Location", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("TripManagement.Domain.DriversAggregate.Driver", b =>
                 {
                     b.HasOne("TripManagement.Domain.DriversAggregate.Car", "Car")
@@ -132,7 +129,7 @@ namespace TripManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("TripManagement.Domain.Common.Coordinates", "CurrentCoordinates", b1 =>
+                    b.OwnsOne("TripManagement.Domain.Types.Coordinates.Coordinate", "CurrentCoordinates", b1 =>
                         {
                             b1.Property<Guid>("DriverId")
                                 .HasColumnType("uniqueidentifier");
@@ -158,99 +155,9 @@ namespace TripManagement.Infrastructure.Migrations
                     b.Navigation("CurrentCoordinates");
                 });
 
-            modelBuilder.Entity("TripManagement.Domain.LocationsAggregate.Location", b =>
-                {
-                    b.OwnsOne("TripManagement.Domain.LocationsAggregate.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("LocationId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("Address");
-
-                            b1.HasKey("LocationId");
-
-                            b1.ToTable("Location");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LocationId");
-                        });
-
-                    b.OwnsOne("TripManagement.Domain.LocationsAggregate.City", "City", b1 =>
-                        {
-                            b1.Property<Guid>("LocationId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("City");
-
-                            b1.HasKey("LocationId");
-
-                            b1.ToTable("Location");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LocationId");
-                        });
-
-                    b.OwnsOne("TripManagement.Domain.Common.Coordinates", "Coordinates", b1 =>
-                        {
-                            b1.Property<Guid>("LocationId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<double>("Latitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Latitude");
-
-                            b1.Property<double>("Longitude")
-                                .HasColumnType("float")
-                                .HasColumnName("Longitude");
-
-                            b1.HasKey("LocationId");
-
-                            b1.ToTable("Location");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LocationId");
-                        });
-
-                    b.OwnsOne("TripManagement.Domain.LocationsAggregate.PlaceId", "PlaceId", b1 =>
-                        {
-                            b1.Property<Guid>("LocationId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("PlaceId");
-
-                            b1.HasKey("LocationId");
-
-                            b1.ToTable("Location");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LocationId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
-
-                    b.Navigation("City")
-                        .IsRequired();
-
-                    b.Navigation("Coordinates")
-                        .IsRequired();
-
-                    b.Navigation("PlaceId")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("TripManagement.Domain.TripsAggregate.Trip", b =>
                 {
-                    b.HasOne("TripManagement.Domain.LocationsAggregate.Location", "Destination")
+                    b.HasOne("TripManagement.Domain.Types.Locations.Location", "Destination")
                         .WithMany()
                         .HasForeignKey("DestinationId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -261,28 +168,11 @@ namespace TripManagement.Infrastructure.Migrations
                         .HasForeignKey("DriverId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TripManagement.Domain.LocationsAggregate.Location", "Origin")
+                    b.HasOne("TripManagement.Domain.Types.Locations.Location", "Origin")
                         .WithMany()
                         .HasForeignKey("OriginId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.OwnsOne("TripManagement.Domain.Common.Distance", "Distance", b1 =>
-                        {
-                            b1.Property<Guid>("TripId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<double>("Value")
-                                .HasColumnType("float")
-                                .HasColumnName("Distance");
-
-                            b1.HasKey("TripId");
-
-                            b1.ToTable("Trips");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TripId");
-                        });
 
                     b.OwnsOne("TripManagement.Domain.TripsAggregate.Credits", "CreditsCost", b1 =>
                         {
@@ -301,7 +191,7 @@ namespace TripManagement.Infrastructure.Migrations
                                 .HasForeignKey("TripId");
                         });
 
-                    b.OwnsOne("TripManagement.Domain.Common.Coordinates", "CurrentCoordinates", b1 =>
+                    b.OwnsOne("TripManagement.Domain.Types.Coordinates.Coordinate", "CurrentCoordinate", b1 =>
                         {
                             b1.Property<Guid>("TripId")
                                 .HasColumnType("uniqueidentifier");
@@ -339,10 +229,27 @@ namespace TripManagement.Infrastructure.Migrations
                                 .HasForeignKey("TripId");
                         });
 
+                    b.OwnsOne("TripManagement.Domain.Types.Distance", "Distance", b1 =>
+                        {
+                            b1.Property<Guid>("TripId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<double>("Value")
+                                .HasColumnType("float")
+                                .HasColumnName("Distance");
+
+                            b1.HasKey("TripId");
+
+                            b1.ToTable("Trips");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TripId");
+                        });
+
                     b.Navigation("CreditsCost")
                         .IsRequired();
 
-                    b.Navigation("CurrentCoordinates")
+                    b.Navigation("CurrentCoordinate")
                         .IsRequired();
 
                     b.Navigation("Destination");
@@ -355,6 +262,96 @@ namespace TripManagement.Infrastructure.Migrations
                     b.Navigation("Origin");
 
                     b.Navigation("UserId")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TripManagement.Domain.Types.Locations.Location", b =>
+                {
+                    b.OwnsOne("TripManagement.Domain.Types.Locations.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("LocationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("Address");
+
+                            b1.HasKey("LocationId");
+
+                            b1.ToTable("Location");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LocationId");
+                        });
+
+                    b.OwnsOne("TripManagement.Domain.Types.Locations.City", "City", b1 =>
+                        {
+                            b1.Property<Guid>("LocationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("City");
+
+                            b1.HasKey("LocationId");
+
+                            b1.ToTable("Location");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LocationId");
+                        });
+
+                    b.OwnsOne("TripManagement.Domain.Types.Coordinates.Coordinate", "Coordinate", b1 =>
+                        {
+                            b1.Property<Guid>("LocationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<double>("Latitude")
+                                .HasColumnType("float")
+                                .HasColumnName("Latitude");
+
+                            b1.Property<double>("Longitude")
+                                .HasColumnType("float")
+                                .HasColumnName("Longitude");
+
+                            b1.HasKey("LocationId");
+
+                            b1.ToTable("Location");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LocationId");
+                        });
+
+                    b.OwnsOne("TripManagement.Domain.Types.Locations.PlaceId", "PlaceId", b1 =>
+                        {
+                            b1.Property<Guid>("LocationId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)")
+                                .HasColumnName("PlaceId");
+
+                            b1.HasKey("LocationId");
+
+                            b1.ToTable("Location");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LocationId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
+
+                    b.Navigation("City")
+                        .IsRequired();
+
+                    b.Navigation("Coordinate")
+                        .IsRequired();
+
+                    b.Navigation("PlaceId")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

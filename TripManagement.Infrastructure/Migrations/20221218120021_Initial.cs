@@ -35,8 +35,7 @@ namespace TripManagement.Infrastructure.Migrations
                     PlaceId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Latitude = table.Column<double>(type: "float", nullable: false),
-                    Longitude = table.Column<double>(type: "float", nullable: false),
-                    SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
+                    Longitude = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
