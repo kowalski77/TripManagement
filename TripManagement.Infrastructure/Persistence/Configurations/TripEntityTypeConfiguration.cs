@@ -33,5 +33,15 @@ public class TripEntityTypeConfiguration : IEntityTypeConfiguration<Trip>
             .HasOne(x => x.Origin)
             .WithMany()
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.OwnsOne(x => x.CreditsCost, y =>
+        {
+            y.Property(z => z.Value).HasColumnName("CreditsCost");
+        });
+
+        builder.OwnsOne(x => x.Distance, y =>
+        {
+            y.Property(z => z.Value).HasColumnName("Distance");
+        });
     }
 }

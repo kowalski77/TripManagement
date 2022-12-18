@@ -15,14 +15,13 @@ public sealed class Trip : Entity, IAggregateRoot
     private Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
     {
         this.Id = Id;
-        UserId = userId.NonNull();
-        PickUp = pickUp;
-        Origin = origin.NonNull();
-        Destination = destination.NonNull();
-        CurrentCoordinates = origin.Coordinates;
-        TripStatus = TripStatus.Draft;
-        Kilometers = 0;
-
+        this.UserId = userId.NonNull();
+        this.PickUp = pickUp;
+        this.Origin = origin.NonNull();
+        this.Destination = destination.NonNull();
+        this.CurrentCoordinates = origin.Coordinates;
+        this.TripStatus = TripStatus.Draft;
+        this.Distance = new Distance(0);
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
     }
 
@@ -42,9 +41,9 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public TripStatus TripStatus { get; private set; }
 
-    public decimal Kilometers { get; private set; }
+    public Distance Distance { get; private set; }
 
-    public int? CreditsCost { get; private init; }
+    public Credits CreditsCost { get; private init; }
 
     public static Result<Trip> CreateDraft(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options)
     {

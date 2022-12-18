@@ -12,7 +12,7 @@ using TripManagement.Infrastructure.Persistence;
 namespace TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20221210185455_Initial")]
+    [Migration("20221218105750_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -95,17 +95,11 @@ namespace TripManagement.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CreditsCost")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("DestinationId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("DriverId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal>("Kilometers")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("OriginId")
                         .HasColumnType("uniqueidentifier");
@@ -273,6 +267,40 @@ namespace TripManagement.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.OwnsOne("TripManagement.Domain.Common.Distance", "Distance", b1 =>
+                        {
+                            b1.Property<Guid>("TripId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<double>("Value")
+                                .HasColumnType("float")
+                                .HasColumnName("Distance");
+
+                            b1.HasKey("TripId");
+
+                            b1.ToTable("Trips");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TripId");
+                        });
+
+                    b.OwnsOne("TripManagement.Domain.TripsAggregate.Credits", "CreditsCost", b1 =>
+                        {
+                            b1.Property<Guid>("TripId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("int")
+                                .HasColumnName("CreditsCost");
+
+                            b1.HasKey("TripId");
+
+                            b1.ToTable("Trips");
+
+                            b1.WithOwner()
+                                .HasForeignKey("TripId");
+                        });
+
                     b.OwnsOne("TripManagement.Domain.Common.Coordinates", "CurrentCoordinates", b1 =>
                         {
                             b1.Property<Guid>("TripId")
@@ -311,10 +339,16 @@ namespace TripManagement.Infrastructure.Migrations
                                 .HasForeignKey("TripId");
                         });
 
+                    b.Navigation("CreditsCost")
+                        .IsRequired();
+
                     b.Navigation("CurrentCoordinates")
                         .IsRequired();
 
                     b.Navigation("Destination");
+
+                    b.Navigation("Distance")
+                        .IsRequired();
 
                     b.Navigation("Driver");
 

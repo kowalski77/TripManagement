@@ -79,8 +79,8 @@ namespace TripManagement.Infrastructure.Migrations
                     Latitude = table.Column<double>(type: "float", nullable: false),
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     TripStatus = table.Column<int>(type: "int", nullable: false),
-                    Kilometers = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreditsCost = table.Column<int>(type: "int", nullable: true),
+                    Distance = table.Column<double>(type: "float", nullable: false),
+                    CreditsCost = table.Column<int>(type: "int", nullable: false),
                     SoftDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

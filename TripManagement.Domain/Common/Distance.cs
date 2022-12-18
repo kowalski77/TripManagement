@@ -4,7 +4,7 @@ public record struct Kilometers(Distance Distance, double Value);
 
 public record struct Milles(Distance Distance, double Value);
 
-public record struct Distance(double Value)
+public record Distance(double Value)
 {
     private const int EarthRadius = 6371;
 
