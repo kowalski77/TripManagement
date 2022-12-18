@@ -30,6 +30,7 @@ public static class TripsDataBuilder
         fixture.Customize<City>(x => x.With(y => y.Value, "Sabadell"));
 
         return Location.Create(
+            Guid.NewGuid(),
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
@@ -41,6 +42,7 @@ public static class TripsDataBuilder
         fixture.Customize<City>(x => x.With(y => y.Value, "Barcelona"));
         
         return Location.Create(
+            Guid.NewGuid(),
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
