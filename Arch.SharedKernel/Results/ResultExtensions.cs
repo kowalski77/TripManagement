@@ -2,12 +2,12 @@
 
 public static class ResultExtensions
 {
-    public static async Task<Result<T>> Act<T>(this Result result, Func<Task<Result<T>>> func) =>
+    public static async Task<Result<T>> OnSucess<T>(this Result result, Func<Task<Result<T>>> func) =>
         result.NonNull().Success ?
             await func.NonNull()().ConfigureAwait(false)
             : result.Error!;
 
-    public static async Task<Result<TR>> Act<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
+    public static async Task<Result<TR>> OnSuccess<T, TR>(this Task<Result<T>> result, Func<T, Result<TR>> mapper)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
 
@@ -16,7 +16,7 @@ public static class ResultExtensions
             awaitedResult.Error!;
     }
 
-    public static async Task<Result<TR>> Act<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
+    public static async Task<Result<TR>> OnSuccess<T, TR>(this Task<Result<T>> result, Func<T, Task<TR>> func)
     {
         Result<T> awaitedResult = await result.NonNull().ConfigureAwait(false);
         return awaitedResult.Success ?
@@ -35,7 +35,7 @@ public static class ResultExtensions
             Result.Ok();
     }
 
-    public static Result<TR> Map<T, TR>(this Result<T> result, Func<T, TR> mapper) =>
+    public static Result<TR> OnSuccess<T, TR>(this Result<T> result, Func<T, TR> mapper) =>
     result.NonNull().Success ?
             mapper.NonNull()(result.Value) :
             result.Error!;
