@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
-using TripManagement.Domain.Common;
+using TripManagement.Domain.Types;
+using TripManagement.Domain.Types.Coordinates;
 
 namespace TripManagement.UnitTests.Trips;
 
@@ -10,8 +11,8 @@ public class CoordinatesTests
     {
         // Arrange
         const int expectedDistance = 18;
-        Coordinates origin = Coordinates.CreateInstance(41.54, 2.10).Value;
-        Coordinates destination = Coordinates.CreateInstance(41.38, 2.17).Value;
+        Coordinate origin = Coordinate.CreateInstance(41.54, 2.10).Value;
+        Coordinate destination = Coordinate.CreateInstance(41.38, 2.17).Value;
 
         // Act
         Kilometers kilometers = origin.DistanceTo(destination);
@@ -24,8 +25,8 @@ public class CoordinatesTests
     public void Distance_between_two_coordintes_with_same_values_is_zero()
     {
         // Arrange
-        Coordinates origin = Coordinates.CreateInstance(41.54, 2.10).Value;
-        Coordinates destination = Coordinates.CreateInstance(41.54, 2.10).Value;
+        Coordinate origin = Coordinate.CreateInstance(41.54, 2.10).Value;
+        Coordinate destination = Coordinate.CreateInstance(41.54, 2.10).Value;
 
         // Act
         Kilometers kilometers = origin.DistanceTo(destination);

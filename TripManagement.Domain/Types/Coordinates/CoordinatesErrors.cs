@@ -2,7 +2,7 @@
 using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 
-namespace TripManagement.Domain.Common;
+namespace TripManagement.Domain.Types.Coordinates;
 
 public static class CoordinatesErrors
 {
@@ -10,7 +10,7 @@ public static class CoordinatesErrors
             CoordinatesErrorConstants.OutOfRangeCoordinatesCode,
             string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.OutOfRangeCoordinatesMessage, argument, min, max));
 
-    public static ErrorResult LocationNameNotRetrieved(Coordinates coordinates) => new(
+    public static ErrorResult LocationNameNotRetrieved(Coordinate coordinates) => new(
             CoordinatesErrorConstants.LocationNameCode,
             string.Format(CultureInfo.InvariantCulture, CoordinatesErrorConstants.LocationNameMessage, coordinates.NonNull().Latitude, coordinates.Longitude));
 }

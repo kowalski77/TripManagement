@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.Extensions.Options;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Common;
-using TripManagement.Domain.LocationsAggregate;
 using TripManagement.Domain.TripsAggregate;
+using TripManagement.Domain.Types.Coordinates;
+using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.Application.Trips.CreateDraft;
 
@@ -25,8 +25,8 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     public async Task<Result<CreateDraftResponse>> Handle(Request request, CancellationToken cancellationToken)
     {
-        var originCoordinates = Coordinates.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
-        var destinationCoordinates = Coordinates.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
+        var originCoordinates = Coordinate.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
+        var destinationCoordinates = Coordinate.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
         var userId = UserId.CreateInstance(request.CreateDraft.UserId);
 
         return (await Result.Init
@@ -35,7 +35,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
             .Map(trip => new CreateDraftResponse(trip.Id));
     }
 
-    private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinates origin, Coordinates destination, CancellationToken cancellationToken) =>
+    private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinate origin, Coordinate destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
             .Act(locations => Trip.CreateDraft(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, this.tripOptions))
             .Act(async trip =>

@@ -13,7 +13,7 @@ public class TripEntityTypeConfiguration : IEntityTypeConfiguration<Trip>
             y.Property(z => z.Value).HasColumnName("UserId");
         });
 
-        builder.OwnsOne(x => x.CurrentCoordinates, y =>
+        builder.OwnsOne(x => x.CurrentCoordinate, y =>
         {
             y.Property(z => z.Latitude).HasColumnName("Latitude");
             y.Property(z => z.Longitude).HasColumnName("Longitude");

@@ -1,8 +1,10 @@
-﻿namespace TripManagement.Domain.Common;
+﻿using TripManagement.Domain.Types;
+
+namespace TripManagement.Domain.Types.Coordinates;
 
 internal static class Harvesine
 {
-    public static Distance CalculateDistanceTo(this Coordinates origin, Coordinates destination)
+    public static Distance CalculateDistanceTo(this Coordinate origin, Coordinate destination)
     {
         Radians latitude = new Degrees(destination.Latitude - origin.Latitude).ToRadians();
         Radians longitude = new Degrees(destination.Longitude - origin.Longitude).ToRadians();

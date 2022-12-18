@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using TripManagement.Domain.LocationsAggregate;
 using TripManagement.Domain.TripsAggregate;
+using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.Domain;
 

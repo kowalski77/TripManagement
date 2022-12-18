@@ -3,7 +3,7 @@ using FluentAssertions;
 using Moq;
 using TripManagement.Application.Trips.CreateDraft;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Common;
+using TripManagement.Domain.Types.Coordinates;
 
 namespace TripManagement.IntegrationTests.Trips;
 
@@ -22,7 +22,7 @@ public class CreateDraftTripTests
     public async Task Draft_trip_is_created()
     {
         // Arrange
-        factory.GeocodeAdapterMock.SetupSequence(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinates>(), It.IsAny<CancellationToken>()))
+        factory.GeocodeAdapterMock.SetupSequence(x => x.GetLocationByCoordinatesAsync(It.IsAny<Coordinate>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(Result.Ok(this.factory.Fixture.CreateOriginLocation()))
             .ReturnsAsync(Result.Ok(this.factory.Fixture.CreateDestinationLocation()));
 

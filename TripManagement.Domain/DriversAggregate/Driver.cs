@@ -1,7 +1,7 @@
 ﻿#pragma warning disable 8618
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
-using TripManagement.Domain.Common;
+using TripManagement.Domain.Types.Coordinates;
 
 namespace TripManagement.Domain.DriversAggregate;
 
@@ -25,5 +25,5 @@ public sealed class Driver : Entity, IAggregateRoot
 
     public Car Car { get; private set; }
 
-    public Coordinates? CurrentCoordinates { get; private set; }
+    public Coordinate? CurrentCoordinates { get; private set; }
 }

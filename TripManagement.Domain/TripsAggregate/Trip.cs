@@ -2,9 +2,10 @@
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
-using TripManagement.Domain.Common;
 using TripManagement.Domain.DriversAggregate;
-using TripManagement.Domain.LocationsAggregate;
+using TripManagement.Domain.Types;
+using TripManagement.Domain.Types.Coordinates;
+using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.Domain.TripsAggregate;
 
@@ -19,7 +20,7 @@ public sealed class Trip : Entity, IAggregateRoot
         this.PickUp = pickUp;
         this.Origin = origin.NonNull();
         this.Destination = destination.NonNull();
-        this.CurrentCoordinates = origin.Coordinates;
+        this.CurrentCoordinate = origin.Coordinate;
         this.TripStatus = TripStatus.Draft;
         this.Distance = new Distance(0);
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
@@ -37,7 +38,7 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public Location Destination { get; private set; }
 
-    public Coordinates CurrentCoordinates { get; private set; }
+    public Coordinate CurrentCoordinate { get; private set; }
 
     public TripStatus TripStatus { get; private set; }
 

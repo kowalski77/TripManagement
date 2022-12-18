@@ -1,8 +1,8 @@
 ﻿using AutoFixture;
 using TripManagement.Application.Trips.CreateDraft;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Common;
-using TripManagement.Domain.LocationsAggregate;
+using TripManagement.Domain.Types.Coordinates;
+using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.IntegrationTests.Trips;
 
@@ -33,7 +33,7 @@ public static class TripsDataBuilder
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
-            Coordinates.CreateInstance(CityOneLatitude, CityOneLongitude).Value);
+            Coordinate.CreateInstance(CityOneLatitude, CityOneLongitude).Value);
     }
 
     public static Location CreateDestinationLocation(this IFixture fixture)
@@ -44,6 +44,6 @@ public static class TripsDataBuilder
             fixture.Create<Address>(),
             fixture.Create<City>(),
             fixture.Create<PlaceId>(),
-            Coordinates.CreateInstance(CityTwoLatitude, CityTwoLongitude).Value);
+            Coordinate.CreateInstance(CityTwoLatitude, CityTwoLongitude).Value);
     }
 }

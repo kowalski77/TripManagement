@@ -1,4 +1,4 @@
-﻿using TripManagement.Domain.LocationsAggregate;
+﻿using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.Domain.TripsAggregate;
 
