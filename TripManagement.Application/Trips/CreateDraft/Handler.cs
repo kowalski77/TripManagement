@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Options;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Common.Coordinates;
+using TripManagement.Domain.Common;
 using TripManagement.Domain.LocationsAggregate;
 using TripManagement.Domain.TripsAggregate;
 

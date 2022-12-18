@@ -1,7 +1,7 @@
 ﻿using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
 
-namespace TripManagement.Domain.Common.Coordinates;
+namespace TripManagement.Domain.Common;
 
 public sealed class Coordinates : ValueObject
 {

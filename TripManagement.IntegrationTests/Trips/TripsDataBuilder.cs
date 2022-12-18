@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using TripManagement.Application.Trips.CreateDraft;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Common.Coordinates;
+using TripManagement.Domain.Common;
 using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.IntegrationTests.Trips;

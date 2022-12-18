@@ -1,4 +1,4 @@
-﻿namespace TripManagement.Domain.Common.Coordinates;
+﻿namespace TripManagement.Domain.Common;
 
 public static class CoordinatesErrorConstants
 {

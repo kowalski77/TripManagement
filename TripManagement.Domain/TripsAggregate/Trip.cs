@@ -2,7 +2,7 @@
 using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Results;
-using TripManagement.Domain.Common.Coordinates;
+using TripManagement.Domain.Common;
 using TripManagement.Domain.DriversAggregate;
 using TripManagement.Domain.LocationsAggregate;
 

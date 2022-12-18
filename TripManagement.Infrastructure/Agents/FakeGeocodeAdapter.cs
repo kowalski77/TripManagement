@@ -1,7 +1,7 @@
 ﻿using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 using TripManagement.Domain;
-using TripManagement.Domain.Common.Coordinates;
+using TripManagement.Domain.Common;
 using TripManagement.Domain.LocationsAggregate;
 
 namespace TripManagement.Infrastructure.Agents;

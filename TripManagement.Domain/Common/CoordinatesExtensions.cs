@@ -1,6 +1,6 @@
 ﻿using Arch.SharedKernel;
 
-namespace TripManagement.Domain.Common.Coordinates;
+namespace TripManagement.Domain.Common;
 
 public static class CoordinatesExtensions
 {

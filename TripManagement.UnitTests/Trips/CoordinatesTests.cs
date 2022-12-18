@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using TripManagement.Domain.Common;
-using TripManagement.Domain.Common.Coordinates;
 
 namespace TripManagement.UnitTests.Trips;
 
