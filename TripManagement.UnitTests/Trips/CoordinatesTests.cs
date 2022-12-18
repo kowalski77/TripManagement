@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using TripManagement.Domain.Models.Coordinates;
-using TripManagement.Domain.Models.Types;
+using TripManagement.Domain.Common;
+using TripManagement.Domain.Common.Coordinates;
 
 namespace TripManagement.UnitTests.Trips;
 
@@ -18,7 +18,7 @@ public class CoordinatesTests
         Kilometers kilometers = origin.DistanceTo(destination);
 
         // Assert
-        kilometers.Value.Should().Be(expectedDistance);
+        _ = kilometers.Value.Should().Be(expectedDistance);
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public class CoordinatesTests
         Kilometers kilometers = origin.DistanceTo(destination);
 
         // Assert
-        kilometers.Value.Should().Be(0);
+        _ = kilometers.Value.Should().Be(0);
     }
 }

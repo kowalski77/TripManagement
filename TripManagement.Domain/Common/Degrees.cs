@@ -1,4 +1,4 @@
-﻿namespace TripManagement.Domain.Models.Types;
+﻿namespace TripManagement.Domain.Common;
 
 public record struct Radians(double Value);
 

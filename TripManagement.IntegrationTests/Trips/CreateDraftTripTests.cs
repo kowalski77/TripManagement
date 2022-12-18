@@ -3,7 +3,7 @@ using FluentAssertions;
 using Moq;
 using TripManagement.Application.Trips.CreateDraft;
 using TripManagement.Contracts.Models;
-using TripManagement.Domain.Models.Coordinates;
+using TripManagement.Domain.Common.Coordinates;
 
 namespace TripManagement.IntegrationTests.Trips;
 

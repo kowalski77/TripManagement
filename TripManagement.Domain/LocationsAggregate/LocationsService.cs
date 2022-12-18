@@ -1,6 +1,6 @@
 ﻿using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
-using TripManagement.Domain.Models.Coordinates;
+using TripManagement.Domain.Common.Coordinates;
 
 namespace TripManagement.Domain.LocationsAggregate;
 

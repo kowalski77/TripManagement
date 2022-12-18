@@ -1,7 +1,6 @@
 ﻿using Arch.SharedKernel;
-using TripManagement.Domain.Models.Types;
 
-namespace TripManagement.Domain.Models.Coordinates;
+namespace TripManagement.Domain.Common.Coordinates;
 
 public static class CoordinatesExtensions
 {
