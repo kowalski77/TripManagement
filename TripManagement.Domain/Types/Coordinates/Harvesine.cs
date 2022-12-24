@@ -1,6 +1,4 @@
-﻿using TripManagement.Domain.Types;
-
-namespace TripManagement.Domain.Types.Coordinates;
+﻿namespace TripManagement.Domain.Types.Coordinates;
 
 internal static class Harvesine
 {
@@ -13,6 +11,8 @@ internal static class Harvesine
                 Math.Cos(new Degrees(origin.Latitude).ToRadians().Value) * Math.Cos(new Degrees(destination.Latitude).ToRadians().Value) *
                 Math.Sin(longitude.Value / 2) * Math.Sin(longitude.Value / 2);
 
-        return new Distance(2 * Math.Asin(Math.Sqrt(value)));
+        Distance distance = new(2 * Math.Asin(Math.Sqrt(value)));
+
+        return distance;
     }
 }
