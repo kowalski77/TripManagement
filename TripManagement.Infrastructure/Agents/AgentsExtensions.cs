@@ -9,7 +9,12 @@ public static class AgentsExtensions
     public static void AddAgents(this IServiceCollection services, IConfiguration configuration)
     {
         GeocodeApiOptions geocodeOptions = configuration.GetSection(nameof(GeocodeApiOptions)).Get<GeocodeApiOptions>()!;
+        
+        services.AddOptions<GeocodeApiOptions>()
+            .Bind(configuration.GetSection(nameof(GeocodeApiOptions)))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
 
-        services.AddHttpClient<IGeocodeAdapter, GeocodeApiAdapter>(client => client.BaseAddress = new Uri(geocodeOptions.BaseUrl));
+        services.AddHttpClient<IGeocodeAdapter, GeocodeApiAdapter>();
     }
 }
