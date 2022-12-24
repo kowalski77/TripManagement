@@ -2,7 +2,9 @@
 
 public class AddressComponent
 {
-    public string LongName { get; set; }
+    public required string Name { get; set; }
 
-    public string ShortName { get; set; }
+    public required string City { get; set; }
+
+    public required string PostalCode { get; set; }
 }

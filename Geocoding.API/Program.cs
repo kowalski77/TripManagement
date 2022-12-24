@@ -16,9 +16,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapGet("/locations/coordinates", (decimal latitude, decimal longitude) =>
+app.MapGet("/locations/coordinates", (double latitude, double longitude) =>
 {
-    Place place = new Fixture().Create<Place>();
+    Fixture fixture = new();
+    fixture.Customize<AddressComponent>(c => c.With(x => x.City, "Sabadell"));
+    fixture.Customize<Location>(c => c.With(x => x.Latitude, 41.32).With(x => x.Longitude, 2.06));
+
+    Place place = fixture.Create<Place>();
 
     return Results.Ok(place);
 })

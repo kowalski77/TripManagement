@@ -2,7 +2,7 @@
 
 public class Geometry
 {
-    public Location? Location { get; set; }
+    public required Location Location { get; set; }
     
     public string? LocationType { get; set; }
 }

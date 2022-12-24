@@ -2,13 +2,9 @@
 
 public class Place
 {
-    public List<AddressComponent>? AddressComponents { get; set; }
+    public required AddressComponent AddressComponent { get; set; }
 
-    public string? FormatAddress { get; set; }
+    public required Geometry Geometry { get; set; }
 
-    public Geometry? Geometry { get; set; }
-
-    public string? PlaceId { get; set; }
-    
-    public List<string>? Types { get; set; }
+    public required string PlaceId { get; set; }
 }

@@ -9,7 +9,7 @@ public static class InfrastructureExtensions
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAgents();
+        services.AddAgents(configuration);
         services.AddRepositories();
         services.AddSqlPersistence(configuration.GetConnectionString("DefaultConnection")!);
     }
