@@ -18,7 +18,7 @@ public class CoordinatesTests
         Kilometers kilometers = origin.DistanceTo(destination);
 
         // Assert
-        _ = kilometers.Value.Should().Be(expectedDistance);
+        kilometers.Value.Should().Be(expectedDistance);
     }
 
     [Fact]
@@ -32,6 +32,6 @@ public class CoordinatesTests
         Kilometers kilometers = origin.DistanceTo(destination);
 
         // Assert
-        _ = kilometers.Value.Should().Be(0);
+        kilometers.Value.Should().Be(0);
     }
 }
