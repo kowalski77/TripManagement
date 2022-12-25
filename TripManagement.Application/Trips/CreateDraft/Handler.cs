@@ -37,7 +37,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinate origin, Coordinate destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
-            .OnSuccess(locations => Trip.CreateDraft(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, tripOptions))
+            .OnSuccess(locations => DraftTrip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, tripOptions))
             .OnSuccess(async trip =>
             {
                 tripRepository.Add(trip);

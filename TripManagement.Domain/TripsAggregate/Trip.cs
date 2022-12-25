@@ -13,7 +13,7 @@ public sealed class Trip : Entity, IAggregateRoot
 {
     private Trip() { }
 
-    private Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
+    internal Trip(Guid Id, UserId userId, DateTime pickUp, Location origin, Location destination)
     {
         this.Id = Id;
         this.UserId = userId.NonNull();
@@ -45,14 +45,6 @@ public sealed class Trip : Entity, IAggregateRoot
     public Distance Distance { get; private set; }
 
     public Credits CreditsCost { get; private init; }
-
-    public static Result<Trip> CreateDraft(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options)
-    {
-        Result result = TripExtensions.Validate(origin, destination, options);
-        return result.Success ?
-            new Trip(id, userId, pickUp, origin, destination) :
-            result.Error!;
-    }
 
     //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
     //        Result.Ok() :
