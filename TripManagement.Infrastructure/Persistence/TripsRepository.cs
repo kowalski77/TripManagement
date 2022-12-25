@@ -15,10 +15,10 @@ namespace TripManagement.Infrastructure.Persistence
             Trip? trip = await context.Trips.FindAsync(new object?[] { id }, cancellationToken).ConfigureAwait(false);
             if (trip is null)
             {
-                return trip;
+                return None.Value;
             }
 
-            await Context.Entry(trip).Reference(x => x.Origin).LoadAsync(cancellationToken).ConfigureAwait(false);
+            await context.Entry(trip).Reference(x => x.Origin).LoadAsync(cancellationToken).ConfigureAwait(false);
             await context.Entry(trip).Reference(x => x.Destination).LoadAsync(cancellationToken).ConfigureAwait(false);
             await context.Entry(trip).Reference(x => x.Driver).LoadAsync(cancellationToken).ConfigureAwait(false);
 

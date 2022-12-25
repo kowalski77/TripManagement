@@ -13,5 +13,5 @@ public class BaseRepository<T> : IRepository<T>
         this.Context.Add(item).Entity;
 
     public virtual async Task<Maybe<T>> GetAsync(Guid id, CancellationToken cancellationToken = default) => 
-        await this.Context.FindAsync<T>(new object[] { id }, cancellationToken).ConfigureAwait(false);
+        (await this.Context.FindAsync<T>(new object[] { id }, cancellationToken).ConfigureAwait(false))!;
 }
