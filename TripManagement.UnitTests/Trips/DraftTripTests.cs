@@ -47,7 +47,7 @@ public class DraftTripTests
         Result<Trip> result = DraftTrip.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
-            fixture.Create<DateTime>(),
+            DateTime.Now,
             fixture.CreateOriginLocation(),
             fixture.CreateDestinationLocation(),
             tripOptions);
@@ -70,7 +70,7 @@ public class DraftTripTests
         Result<Trip> result = DraftTrip.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
-            fixture.Create<DateTime>(),
+            DateTime.Now,
             fixture.CreateOriginLocation(),
             fixture.CreateDestinationLocation(),
             tripOptions);
@@ -93,7 +93,7 @@ public class DraftTripTests
         Result<Trip> result = DraftTrip.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
-            fixture.Create<DateTime>(),
+            DateTime.Now,
             fixture.CreateOriginLocation(),
             fixture.CreateDestinationLocation(),
             tripOptions);
@@ -118,7 +118,7 @@ public class DraftTripTests
         Result<Trip> result = DraftTrip.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
-            fixture.Create<DateTime>(),
+            DateTime.Now,
             location,
             location,
             tripOptions);
