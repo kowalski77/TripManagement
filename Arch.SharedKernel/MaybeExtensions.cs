@@ -9,8 +9,11 @@ public static class MaybeExtensions
         obj is Some<T> some && !predicate.NonNull()(some.Content) ? new None<T>() : obj;
 
     public static T Reduce<T>(this Maybe<T> obj, T substitute) =>
-        obj is Some<T> some ? some.Content : substitute;
+        obj is Some<T> some ? some.Content : substitute.NonNull();
 
     public static T Reduce<T>(this Maybe<T> obj, Func<T> substitute) =>
         obj is Some<T> some ? some.Content : substitute.NonNull()();
+
+    public static TR Match<T, TR>(this Maybe<T> obj, Func<T, TR> some, Func<TR> none) =>
+        obj is Some<T> someObj ? some.NonNull()(someObj.Content) : none.NonNull()();
 }
