@@ -36,4 +36,16 @@ public class ConfirmTripTests
         // Assert
         response.Success.Should().BeTrue();
     }
+
+    [Fact]
+    public async Task Trip_does_not_exists()
+    {
+        Request request = new(new ConfirmTripRequest(Guid.NewGuid()));
+
+        // Act
+        Result response = await factory.Mediator.Send(request);
+
+        // Assert
+        response.Success.Should().BeFalse();
+    }
 }
