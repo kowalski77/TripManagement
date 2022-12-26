@@ -3,7 +3,7 @@ using Arch.SharedKernel.Results;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
-namespace TripManagement.Domain.TripsAggregate.DraftTrip;
+namespace TripManagement.Domain.TripsAggregate;
 
 public static class Draft
 {

@@ -1,9 +1,9 @@
 ﻿using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 
-namespace TripManagement.Domain.TripsAggregate.ConfirmTrip;
+namespace TripManagement.Domain.TripsAggregate;
 
-public static class ConfirmExtensions
+public static class ConfirmTrip
 {
     public static Result CanConfirm(this Trip trip) =>
         trip.NonNull().TripStatus == TripStatus.Draft ?

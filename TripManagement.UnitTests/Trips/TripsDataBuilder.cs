@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using TripManagement.Domain.TripsAggregate;
-using TripManagement.Domain.TripsAggregate.DraftTrip;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 

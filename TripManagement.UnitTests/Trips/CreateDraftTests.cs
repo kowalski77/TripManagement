@@ -2,7 +2,6 @@
 using AutoFixture;
 using FluentAssertions;
 using TripManagement.Domain.TripsAggregate;
-using TripManagement.Domain.TripsAggregate.DraftTrip;
 using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.UnitTests.Trips;

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace TripManagement.Domain.TripsAggregate.ConfirmTrip;
+namespace TripManagement.Domain.TripsAggregate;
 
 [Serializable]
 public class TripConfirmationException : Exception
