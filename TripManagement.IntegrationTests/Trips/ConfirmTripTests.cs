@@ -40,6 +40,7 @@ public class ConfirmTripTests
     [Fact]
     public async Task Trip_does_not_exists()
     {
+        // Arrange
         Request request = new(new ConfirmTripRequest(Guid.NewGuid()));
 
         // Act
