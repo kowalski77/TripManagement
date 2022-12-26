@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using TripManagement.Contracts.Models;
 using TripManagement.Domain.TripsAggregate;
+using TripManagement.Domain.TripsAggregate.DraftTrip;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
@@ -37,7 +38,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinate origin, Coordinate destination, CancellationToken cancellationToken) =>
         await locationsService.CreateTripLocationsAsync(origin, destination, cancellationToken)
-            .OnSuccess(locations => DraftTrip.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, tripOptions))
+            .OnSuccess(locations => Draft.Create(Guid.NewGuid(), userId, pickUp, locations.origin, locations.destination, tripOptions))
             .OnSuccess(async trip =>
             {
                 tripRepository.Add(trip);

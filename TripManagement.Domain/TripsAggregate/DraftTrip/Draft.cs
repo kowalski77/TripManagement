@@ -3,11 +3,11 @@ using Arch.SharedKernel.Results;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
-namespace TripManagement.Domain.TripsAggregate;
+namespace TripManagement.Domain.TripsAggregate.DraftTrip;
 
-public static class DraftTrip
+public static class Draft
 {
-    public static Result<Trip> Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options) => 
+    public static Result<Trip> Create(Guid id, UserId userId, DateTime pickUp, Location origin, Location destination, TripOptions options) =>
         Result.Init.Validate(
                 ValidateMinDistance(origin.NonNull(), destination.NonNull(), options.NonNull()),
                 ValidateMaxDistance(origin, destination, options),

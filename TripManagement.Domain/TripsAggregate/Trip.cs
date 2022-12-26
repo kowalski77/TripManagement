@@ -25,6 +25,11 @@ public sealed class Trip : Entity, IAggregateRoot
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
     }
 
+    internal Trip(Trip trip) 
+        : this(trip.Id, trip.UserId, trip.PickUp, trip.Origin, trip.Destination)
+    {
+    }
+
     public Guid Id { get; private set; }
 
     public UserId UserId { get; private set; }
@@ -39,26 +44,11 @@ public sealed class Trip : Entity, IAggregateRoot
 
     public Coordinate CurrentCoordinate { get; private set; }
 
-    public TripStatus TripStatus { get; private set; }
+    public TripStatus TripStatus { get; internal set; }
 
     public Distance Distance { get; private set; }
 
     public Credits CreditsCost { get; private init; }
-
-    //public Result CanConfirm() => TripStatus is TripStatus.Draft ?
-    //        Result.Ok() :
-    //        TripErrors.ConfirmFailed(TripStatus);
-
-    //public void Confirm()
-    //{
-    //    Result result = CanConfirm();
-    //    if (result.Failure)
-    //    {
-    //        throw new TripConfirmationException(result.Error!.Message);
-    //    }
-
-    //    TripStatus = TripStatus.Confirmed;
-    //}
 
     //public Result CanInvalidate() => TripStatus is TripStatus.Confirmed ?
     //        Result.Ok() :

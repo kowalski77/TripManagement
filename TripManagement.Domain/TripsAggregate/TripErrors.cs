@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Arch.SharedKernel;
 using Arch.SharedKernel.Results;
 using TripManagement.Domain.Types.Coordinates;
 
@@ -29,7 +30,7 @@ public static class TripErrors
             string.Format(
                 CultureInfo.InvariantCulture,
                 TripErrorConstants.LocationNotFoundWithCoordinatesMessage,
-                coordinates.Latitude,
+                coordinates.NonNull().Latitude,
                 coordinates.Longitude));
 
     public static ErrorResult CityNotAllowed(string city) => new(

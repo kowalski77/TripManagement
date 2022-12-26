@@ -2,6 +2,7 @@
 using AutoFixture;
 using FluentAssertions;
 using TripManagement.Domain.TripsAggregate;
+using TripManagement.Domain.TripsAggregate.DraftTrip;
 using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.UnitTests.Trips;
@@ -21,7 +22,7 @@ public class DraftTripTests
             .Create();
 
         // Act
-        Result<Trip> result = DraftTrip.Create(
+        Result<Trip> result = Draft.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
             fixture.Create<DateTime>(),
@@ -44,7 +45,7 @@ public class DraftTripTests
             .Create();
 
         // Act
-        Result<Trip> result = DraftTrip.Create(
+        Result<Trip> result = Draft.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
             DateTime.Now,
@@ -67,7 +68,7 @@ public class DraftTripTests
             .Create();
 
         // Act
-        Result<Trip> result = DraftTrip.Create(
+        Result<Trip> result = Draft.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
             DateTime.Now,
@@ -90,7 +91,7 @@ public class DraftTripTests
             .Create();
 
         // Act
-        Result<Trip> result = DraftTrip.Create(
+        Result<Trip> result = Draft.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
             DateTime.Now,
@@ -115,7 +116,7 @@ public class DraftTripTests
         Location location = fixture.CreateOriginLocation();
 
         // Act
-        Result<Trip> result = DraftTrip.Create(
+        Result<Trip> result = Draft.Create(
             Guid.NewGuid(),
             UserId.CreateInstance(Guid.NewGuid()).Value,
             DateTime.Now,
