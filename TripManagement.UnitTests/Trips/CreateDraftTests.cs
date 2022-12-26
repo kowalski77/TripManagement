@@ -7,7 +7,7 @@ using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.UnitTests.Trips;
 
-public class DraftTripTests
+public class CreateDraftTests
 {
     private readonly IFixture fixture = new Fixture();
 
