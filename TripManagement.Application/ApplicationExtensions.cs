@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using TripManagement.Application.Behaviors;
-using TripManagement.Application.Trips.CreateDraft;
+using TripManagement.Application.Trips.DraftTrip;
 
 namespace TripManagement.Application;
 

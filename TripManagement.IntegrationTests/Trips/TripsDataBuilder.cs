@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using TripManagement.Application.Trips.CreateDraft;
+using TripManagement.Application.Trips.DraftTrip;
 using TripManagement.Contracts;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;

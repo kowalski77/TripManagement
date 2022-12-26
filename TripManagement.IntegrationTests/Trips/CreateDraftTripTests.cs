@@ -1,7 +1,7 @@
 ﻿using Arch.SharedKernel.Results;
 using FluentAssertions;
 using Moq;
-using TripManagement.Application.Trips.CreateDraft;
+using TripManagement.Application.Trips.DraftTrip;
 using TripManagement.Contracts;
 using TripManagement.Domain.Types.Coordinates;
 

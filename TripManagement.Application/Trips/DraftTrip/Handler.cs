@@ -6,7 +6,7 @@ using TripManagement.Domain.TripsAggregate;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
-namespace TripManagement.Application.Trips.CreateDraft;
+namespace TripManagement.Application.Trips.DraftTrip;
 
 public sealed record Request(CreateDraftTripRequest CreateDraft) : IRequest<Result<CreateDraftTripResponse>>;
 

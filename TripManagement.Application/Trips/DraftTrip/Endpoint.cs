@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TripManagement.Contracts;
 
-namespace TripManagement.Application.Trips.CreateDraft;
+namespace TripManagement.Application.Trips.DraftTrip;
 
 public static class Endpoint
 {

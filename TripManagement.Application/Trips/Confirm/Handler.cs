@@ -1,0 +1,1 @@
+namespace TripManagement.Application.Trips.Confirm;

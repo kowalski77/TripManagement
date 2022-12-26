@@ -12,4 +12,8 @@
     <ProjectReference Include="..\TripManagement.Infrastructure\TripManagement.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Trips\Confirm\" />
+  </ItemGroup>
+
 </Project>
