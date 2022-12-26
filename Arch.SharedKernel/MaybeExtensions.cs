@@ -16,4 +16,9 @@ public static class MaybeExtensions
 
     public static TR Match<T, TR>(this Maybe<T> obj, Func<T, TR> some, Func<TR> none) =>
         obj is Some<T> someObj ? some.NonNull()(someObj.Content) : none.NonNull()();
+
+    public static async Task<TR> Match<T, TR>(this Maybe<T> obj, Func<T, Task<TR>> some, Func<TR> none) =>
+        obj is Some<T> someObj ? 
+        await some.NonNull()(someObj.Content).ConfigureAwait(false) : 
+        none.NonNull()();
 }

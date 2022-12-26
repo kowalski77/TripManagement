@@ -45,6 +45,16 @@ public static class ResultExtensions
             func.NonNull()() :
             result.Error!;
 
+    public static async Task<Result> OnSuccess(this Result result, Func<Task> func)
+    {
+        if (result.NonNull().Success)
+        {
+            await func.NonNull()().ConfigureAwait(false);
+            return Result.Ok();
+        }
+        return result;
+    }
+
     public static void OnFailure(this Result result, Action<Result> action)
     {
         if (result.NonNull().Success)

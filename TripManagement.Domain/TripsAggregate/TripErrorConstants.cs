@@ -14,8 +14,8 @@ public static class TripErrorConstants
     public const string InvalidateFailedCode = "invalidate.not.possible";
     public const string InvalidateFailedMessage = "Can not invalidate due trip status is {0}";
 
-    public const string UserTripNotFoundCode = "usertrip.not.found";
-    public const string TripNotFoundMessage = "Trip for user with id {0} not found";
+    public const string TripNotFoundCode = "trip.not.found";
+    public const string TripNotFoundMessage = "Trip with id {0} not found";
 
     public const string LocationNotFoundWithCoordinatesCode = "location.not.found.with.coordinates";
     public const string LocationNotFoundWithCoordinatesMessage = "Location not found with coordinates {0} {1}";

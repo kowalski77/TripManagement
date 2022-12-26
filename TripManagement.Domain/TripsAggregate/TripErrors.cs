@@ -36,4 +36,8 @@ public static class TripErrors
     public static ErrorResult CityNotAllowed(string city) => new(
             TripErrorConstants.CityNotAllowedCode,
             string.Format(CultureInfo.InvariantCulture, TripErrorConstants.CityNotAllowedMessage, city));
+
+    public static ErrorResult TripNotFound(Guid tripId) => new(
+            TripErrorConstants.TripNotFoundCode,
+            string.Format(CultureInfo.InvariantCulture, TripErrorConstants.TripNotFoundMessage, tripId));
 }
