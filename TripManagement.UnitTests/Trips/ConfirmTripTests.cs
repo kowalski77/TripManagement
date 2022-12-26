@@ -27,10 +27,10 @@ public class ConfirmTripTests
     {
         // Arrange
         Trip trip = this.fixture.CreateDrafTrip();
-        Trip confirmedTrip = trip.Confirm();
-        
+        trip.Confirm();
+
         // Act
-        Result canConfirm = confirmedTrip.CanConfirm();
+        Result canConfirm = trip.CanConfirm();
 
         // Assert
         canConfirm.Success.Should().BeFalse();
@@ -43,10 +43,10 @@ public class ConfirmTripTests
         Trip trip = this.fixture.CreateDrafTrip();
 
         // Act
-        Trip confirmedTrip = trip.Confirm();
+        trip.Confirm();
 
         // Assert
-        confirmedTrip.TripStatus.Should().Be(TripStatus.Confirmed);
+        trip.TripStatus.Should().Be(TripStatus.Confirmed);
     }
 
     [Fact]
@@ -54,10 +54,10 @@ public class ConfirmTripTests
     {
         // Arrange
         Trip trip = this.fixture.CreateDrafTrip();
-        Trip confirmedTrip = trip.Confirm();
+        trip.Confirm();
 
         // Act
-        Action action = () => confirmedTrip.Confirm();
+        Action action = () => trip.Confirm();
 
         // Assert
         action.Should().Throw<TripConfirmationException>();

@@ -44,4 +44,13 @@ public static class ResultExtensions
         result.NonNull().Success ?
             func.NonNull()() :
             result.Error!;
+
+    public static void OnFailure(this Result result, Action<Result> action)
+    {
+        if (result.NonNull().Success)
+        {
+            return;
+        }
+        action.NonNull()(result);
+    }
 }
