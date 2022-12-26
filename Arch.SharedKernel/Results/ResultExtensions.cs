@@ -40,4 +40,8 @@ public static class ResultExtensions
             mapper.NonNull()(result.Value) :
             result.Error!;
 
+    public static Result<T> OnSuccess<T>(this Result result, Func<T> func) =>
+        result.NonNull().Success ?
+            func.NonNull()() :
+            result.Error!;
 }
