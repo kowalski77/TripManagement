@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using TripManagement.Application.Trips.CreateDraft;
-using TripManagement.Contracts.Models;
+using TripManagement.Contracts;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
@@ -15,7 +15,7 @@ public static class TripsDataBuilder
 
     public static Request CreateDraftTripRequest(this IFixture fixture)
     {
-        CreateDraftRequest createDraftRequest = fixture.Build<CreateDraftRequest>()
+        CreateDraftTripRequest createDraftRequest = fixture.Build<CreateDraftTripRequest>()
             .With(x => x.OriginLatitude, CityOneLatitude)
             .With(x => x.OriginLongitude, CityOneLongitude)
             .With(x => x.DestinationLatitude, CityTwoLatitude)

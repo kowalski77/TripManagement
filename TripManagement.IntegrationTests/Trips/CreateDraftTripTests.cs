@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Moq;
 using TripManagement.Application.Trips.CreateDraft;
-using TripManagement.Contracts.Models;
+using TripManagement.Contracts;
 using TripManagement.Domain.Types.Coordinates;
 
 namespace TripManagement.IntegrationTests.Trips;
@@ -29,7 +29,7 @@ public class CreateDraftTripTests
         Request request = this.factory.Fixture.CreateDraftTripRequest();
 
         // Act
-        Result<CreateDraftResponse> response = await factory.Mediator.Send(request);
+        Result<CreateDraftTripResponse> response = await factory.Mediator.Send(request);
 
         // Assert
         response.Success.Should().BeTrue();

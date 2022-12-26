@@ -1,16 +1,16 @@
 ﻿using Arch.SharedKernel.Results;
 using MediatR;
 using Microsoft.Extensions.Options;
-using TripManagement.Contracts.Models;
+using TripManagement.Contracts;
 using TripManagement.Domain.TripsAggregate;
 using TripManagement.Domain.Types.Coordinates;
 using TripManagement.Domain.Types.Locations;
 
 namespace TripManagement.Application.Trips.CreateDraft;
 
-public sealed record Request(CreateDraftRequest CreateDraft) : IRequest<Result<CreateDraftResponse>>;
+public sealed record Request(CreateDraftTripRequest CreateDraft) : IRequest<Result<CreateDraftTripResponse>>;
 
-public sealed class Handler : IRequestHandler<Request, Result<CreateDraftResponse>>
+public sealed class Handler : IRequestHandler<Request, Result<CreateDraftTripResponse>>
 {
     private readonly TripOptions tripOptions;
     private readonly LocationsService locationsService;
@@ -23,7 +23,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
         this.tripRepository = tripRepository;
     }
 
-    public async Task<Result<CreateDraftResponse>> Handle(Request request, CancellationToken cancellationToken)
+    public async Task<Result<CreateDraftTripResponse>> Handle(Request request, CancellationToken cancellationToken)
     {
         Result<Coordinate> originCoordinates = Coordinate.CreateInstance(request.CreateDraft.OriginLatitude, request.CreateDraft.OriginLongitude);
         Result<Coordinate> destinationCoordinates = Coordinate.CreateInstance(request.CreateDraft.DestinationLatitude, request.CreateDraft.DestinationLongitude);
@@ -32,7 +32,7 @@ public sealed class Handler : IRequestHandler<Request, Result<CreateDraftRespons
         return (await Result.Init
             .Validate(originCoordinates, destinationCoordinates, userId)
             .OnSucess(async () => await CreateTripAsync(userId.Value, request.CreateDraft.PickUp, originCoordinates.Value, destinationCoordinates.Value, cancellationToken)))
-            .OnSuccess(trip => new CreateDraftResponse(trip.Id));
+            .OnSuccess(trip => new CreateDraftTripResponse(trip.Id));
     }
 
     private async Task<Result<Trip>> CreateTripAsync(UserId userId, DateTime pickUp, Coordinate origin, Coordinate destination, CancellationToken cancellationToken) =>

@@ -1,7 +1,7 @@
 ﻿using Arch.SharedKernel.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using TripManagement.Contracts.Models;
+using TripManagement.Contracts;
 
 namespace TripManagement.Application.Trips.CreateDraft;
 
@@ -11,12 +11,12 @@ public static class Endpoint
         groupBuilder.MapPost("draft", CreateDraft)
             .WithSummary("Creates a draft trip")
             .WithName("CreateDraftTrip")
-            .Produces<CreateDraftResponse>(StatusCodes.Status200OK)
+            .Produces<CreateDraftTripResponse>(StatusCodes.Status200OK)
             .Produces<ProblemDetails>(StatusCodes.Status400BadRequest);
 
-    private static async Task<IResult> CreateDraft(IMediator mediator, CreateDraftRequest request, CancellationToken cancellationToken)
+    private static async Task<IResult> CreateDraft(IMediator mediator, CreateDraftTripRequest request, CancellationToken cancellationToken)
     {
-        Result<CreateDraftResponse> result = await mediator.Send(new Request(request), cancellationToken);
+        Result<CreateDraftTripResponse> result = await mediator.Send(new Request(request), cancellationToken);
         return result.Success ?
             Results.Ok(result.Value) :
             Results.BadRequest(result.Error);
