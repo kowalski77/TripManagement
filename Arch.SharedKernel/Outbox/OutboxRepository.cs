@@ -1,0 +1,63 @@
+﻿using System.Data.Common;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+
+namespace Arch.SharedKernel.Outbox;
+
+public sealed class OutboxRepository : IDisposable
+{
+    private readonly OutboxContext context;
+
+    public OutboxRepository(DbConnection dbConnection) => context = new OutboxContext(new DbContextOptionsBuilder<OutboxContext>()
+            .UseSqlServer(dbConnection).Options);
+
+    public async Task SaveMessageAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
+        where TIntegrationEvent : class
+    {
+        await context.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken).ConfigureAwait(false);
+
+        OutboxMessage outboxMessage = GetOutboxMessage(integrationEvent.NonNull(), transaction.NonNull().TransactionId);
+        await context.AddAsync(outboxMessage, cancellationToken).ConfigureAwait(false);
+        await context.SaveEntitiesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    public async Task MarkMessageAsPublishedAsync(Guid messageId, CancellationToken cancellationToken = default) =>
+        await UpdateStatusAsync(messageId, EventState.Published, cancellationToken).ConfigureAwait(false);
+
+    public async Task MarkMessageAsFailedAsync(Guid messageId, CancellationToken cancellationToken = default) =>
+        await UpdateStatusAsync(messageId, EventState.PublishedFailed, cancellationToken).ConfigureAwait(false);
+
+    public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(Guid transactionId, CancellationToken cancellationToken = default) =>
+        await context.OutboxMessages
+            .Where(e => e.TransactionId == transactionId && e.State == EventState.NotPublished)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+    public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(CancellationToken cancellationToken = default) =>
+        await context.OutboxMessages
+            .Where(e => e.State == EventState.NotPublished || e.State == EventState.PublishedFailed)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+    private async Task UpdateStatusAsync(Guid messageId, EventState eventState, CancellationToken cancellationToken = default)
+    {
+        OutboxMessage message = await context.OutboxMessages.FirstAsync(x => x.Id == messageId, cancellationToken).ConfigureAwait(false);
+        message.State = eventState;
+
+        context.OutboxMessages.Update(message);
+
+        await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private static OutboxMessage GetOutboxMessage<TIntegrationEvent>(TIntegrationEvent integrationEvent, Guid transactionId)
+        where TIntegrationEvent : class
+    {
+        var data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType());
+        OutboxMessage outboxMessage = new(transactionId, DateTime.Now, data);
+
+        return outboxMessage;
+    }
+
+    public void Dispose() => context.Dispose();
+}
