@@ -23,6 +23,8 @@ public sealed class Trip : Entity, IAggregateRoot
         this.TripStatus = TripStatus.Draft;
         this.Distance = new Distance(0);
         this.CreditsCost = this.CalculateCredits(this.Origin, this.Destination);
+
+        this.AddDomainEvent(new TripCreated(this.Id, this.UserId, this.PickUp, this.Origin, this.Destination));
     }
 
     internal Trip(Trip trip) 

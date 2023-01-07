@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Arch.SharedKernel.Events;
+using MediatR;
 using TripManagement.Application.Behaviors;
 using TripManagement.Application.Trips.DraftTrip;
 
@@ -10,5 +11,6 @@ public static class ApplicationExtensions
     {
         services.AddMediatR(typeof(Handler).Assembly);
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehaviour<,>));
+        services.AddScoped<IEventBusAdapter, EventBusAdapter>();
     }
 }

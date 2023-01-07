@@ -46,6 +46,7 @@ public sealed class TestServicesFactory : IAsyncLifetime
             .Build();
 
         ServiceCollection services = new();
+        services.AddLogging();
         services.AddApplicationServices();
         services.AddDomainServices(config);
         services.AddRepositories();
