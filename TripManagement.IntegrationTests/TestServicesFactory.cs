@@ -1,4 +1,5 @@
-﻿using AutoFixture;
+﻿using Arch.SharedKernel.Events;
+using AutoFixture;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using Moq;
 using TripManagement.Application;
 using TripManagement.Domain;
 using TripManagement.Infrastructure.Persistence;
+using TripManagement.IntegrationTests.Mocks;
 
 namespace TripManagement.IntegrationTests;
 
@@ -23,6 +25,8 @@ public sealed class TestServicesFactory : IAsyncLifetime
     public T GetService<T>() where T : notnull => serviceScope.ServiceProvider.GetRequiredService<T>();
 
     public Mock<IGeocodeAdapter> GeocodeAdapterMock { get; } = new();
+
+    public EventBusAdapterSpy EventBusAdapterSpy { get; private set; }
 
     public async Task InitializeAsync()
     {
@@ -48,6 +52,7 @@ public sealed class TestServicesFactory : IAsyncLifetime
         ServiceCollection services = new();
         services.AddLogging();
         services.AddApplicationServices();
+        services.AddSingleton<IEventBusAdapter, EventBusAdapterSpy>();
         services.AddDomainServices(config);
         services.AddRepositories();
         services.AddSqlPersistence(config.GetConnectionString("IntegrationTestsConnection")!);
@@ -55,5 +60,6 @@ public sealed class TestServicesFactory : IAsyncLifetime
 
         IServiceProvider serviceProvider = services.BuildServiceProvider();
         serviceScope = serviceProvider.CreateScope();
+        this.EventBusAdapterSpy = (EventBusAdapterSpy)serviceScope.ServiceProvider.GetRequiredService<IEventBusAdapter>();
     }
 }

@@ -16,6 +16,7 @@ public class CreateDraftTripTests
     {
         this.factory = factory;
         this.factory.DeleteAllTrips();
+        this.factory.EventBusAdapterSpy.Clear();
     }
 
     [Fact]
@@ -34,5 +35,6 @@ public class CreateDraftTripTests
         // Assert
         response.Success.Should().BeTrue();
         response.Value.Should().NotBe(Guid.Empty);
+        this.factory.EventBusAdapterSpy.Verify<TripCreated>(1).VerifyNoOtherEvents();
     }
 }
