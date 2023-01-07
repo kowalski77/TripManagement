@@ -13,7 +13,6 @@ public sealed class OutboxRepository : IDisposable
             .UseSqlServer(dbConnection).Options);
 
     public async Task SaveMessageAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, IDbContextTransaction transaction, CancellationToken cancellationToken = default)
-        where TIntegrationEvent : class
     {
         await context.Database.UseTransactionAsync(transaction.GetDbTransaction(), cancellationToken).ConfigureAwait(false);
 
@@ -51,12 +50,12 @@ public sealed class OutboxRepository : IDisposable
     }
 
     private static OutboxMessage GetOutboxMessage<TIntegrationEvent>(TIntegrationEvent integrationEvent, Guid transactionId)
-        where TIntegrationEvent : class
     {
-        var data = JsonSerializer.Serialize(integrationEvent, integrationEvent.GetType());
-        OutboxMessage outboxMessage = new(transactionId, DateTime.Now, data);
-
-        return outboxMessage;
+        var data = JsonSerializer.Serialize(integrationEvent, integrationEvent.NonNull().GetType());
+        return new(
+            transactionId, 
+            DateTime.Now, 
+            data);
     }
 
     public void Dispose() => context.Dispose();
