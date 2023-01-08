@@ -2,6 +2,7 @@
 using Arch.SharedKernel.Outbox;
 using AutoFixture;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -32,12 +33,11 @@ public sealed class TestServicesFactory : IAsyncLifetime
     public async Task InitializeAsync()
     {
         TripManagementContext dbContext = GetService<TripManagementContext>();
-        await dbContext.Database.EnsureDeletedAsync();
-        await dbContext.Database.EnsureCreatedAsync();
-
         OutboxContext outboxContext = GetService<OutboxContext>();
-        await outboxContext.Database.EnsureDeletedAsync();
-        await outboxContext.Database.EnsureCreatedAsync();
+
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.MigrateAsync();
+        await outboxContext.Database.MigrateAsync();
     }
 
     public Task DisposeAsync()
