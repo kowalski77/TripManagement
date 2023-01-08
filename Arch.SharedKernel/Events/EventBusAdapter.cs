@@ -19,4 +19,13 @@ public class EventBusAdapter : IEventBusAdapter
 
         return Task.CompletedTask;
     }
+
+    public Task PublishAsync(object message, Type messageType, CancellationToken cancellationToken = default)
+    {
+        var json = JsonSerializer.Serialize(message, messageType, new JsonSerializerOptions { WriteIndented = true });
+
+        this.logger.LogPublishedEvent(json);
+
+        return Task.CompletedTask;
+    }
 }

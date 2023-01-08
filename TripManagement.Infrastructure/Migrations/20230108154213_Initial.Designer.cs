@@ -12,7 +12,7 @@ using TripManagement.Infrastructure.Persistence;
 namespace TripManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(TripManagementContext))]
-    [Migration("20221218121448_Initial")]
+    [Migration("20230108154213_Initial")]
     partial class Initial
     {
         /// <inheritdoc />

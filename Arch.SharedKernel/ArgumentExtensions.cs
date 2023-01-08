@@ -19,4 +19,9 @@ public static class ArgumentExtensions
         value >= min && value <= max ?
         value :
         throw new ArgumentOutOfRangeException(paramName, $"Value must be between {min} and {max}.");
+
+    public static string EnsureType([NotNull]this Type value, [CallerArgumentExpression("value")] string? paramName = null) =>
+        value is not null ?
+        value.AssemblyQualifiedName ?? throw new ArgumentNullException(nameof(value)) :
+        throw new ArgumentNullException(paramName);
 }

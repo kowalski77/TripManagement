@@ -14,6 +14,13 @@ public class EventBusAdapterSpy : IEventBusAdapter
         return Task.CompletedTask;
     }
 
+    public Task PublishAsync(object message, Type messageType, CancellationToken cancellationToken = default)
+    {
+        this.eventsPublished.Add(message);
+
+        return Task.CompletedTask;
+    }
+
     public EventBusAdapterSpy Verify<TEvent>(TEvent @event)
     {
         this.eventsPublished.Should().ContainSingle(e => e.GetType() == typeof(TEvent) && e.Equals(@event));

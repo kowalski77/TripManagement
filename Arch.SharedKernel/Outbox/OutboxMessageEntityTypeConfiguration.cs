@@ -10,5 +10,9 @@ public class OutboxMessageEntityTypeConfiguration : IEntityTypeConfiguration<Out
         builder.NonNull().ToTable("OutboxMessages");
         builder.HasKey(b => b.Id);
         builder.Property(b => b.Id).ValueGeneratedNever();
+        builder.Property(b=>b.Type)
+            .HasConversion(
+                v => v.AssemblyQualifiedName,
+                v => Type.GetType(v!)!);
     }
 }

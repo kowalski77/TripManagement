@@ -7,7 +7,7 @@ namespace TripManagement.Infrastructure.Persistence;
 
 public class TripManagementContext : TransactionContext
 {
-    public TripManagementContext(DbContextOptions options, IMediator mediator)
+    public TripManagementContext(DbContextOptions<TripManagementContext> options, IMediator mediator)
         : base(options, mediator)
     {
     }

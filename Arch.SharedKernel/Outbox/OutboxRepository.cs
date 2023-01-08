@@ -27,17 +27,19 @@ public sealed class OutboxRepository : IDisposable
     public async Task MarkMessageAsFailedAsync(Guid messageId, CancellationToken cancellationToken = default) =>
         await UpdateStatusAsync(messageId, EventState.PublishedFailed, cancellationToken).ConfigureAwait(false);
 
-    public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(Guid transactionId, CancellationToken cancellationToken = default) =>
-        await context.OutboxMessages
+    public async Task<IReadOnlyList<OutboxMessage>> GetNotPublishedAsync(Guid transactionId, CancellationToken cancellationToken = default) =>
+        (await context.OutboxMessages
             .Where(e => e.TransactionId == transactionId && e.State == EventState.NotPublished)
             .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(false))
+        .AsReadOnly();
 
-    public async Task<Maybe<IReadOnlyList<OutboxMessage>>> GetNotPublishedAsync(CancellationToken cancellationToken = default) =>
-        await context.OutboxMessages
+    public async Task<IReadOnlyList<OutboxMessage>> GetNotPublishedAsync(CancellationToken cancellationToken = default) =>
+        (await context.OutboxMessages
             .Where(e => e.State == EventState.NotPublished || e.State == EventState.PublishedFailed)
             .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+            .ConfigureAwait(false))
+        .AsReadOnly();
 
     private async Task UpdateStatusAsync(Guid messageId, EventState eventState, CancellationToken cancellationToken = default)
     {
@@ -51,10 +53,13 @@ public sealed class OutboxRepository : IDisposable
 
     private static OutboxMessage GetOutboxMessage<TIntegrationEvent>(TIntegrationEvent integrationEvent, Guid transactionId)
     {
-        var data = JsonSerializer.Serialize(integrationEvent, integrationEvent.NonNull().GetType());
+        Type integrationEventType = integrationEvent.NonNull()!.GetType();
+        var data = JsonSerializer.Serialize(integrationEvent, integrationEventType);
+        
         return new(
             transactionId, 
-            DateTime.Now, 
+            DateTime.Now,
+            integrationEventType,
             data);
     }
 

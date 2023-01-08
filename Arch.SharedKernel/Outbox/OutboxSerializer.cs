@@ -2,23 +2,20 @@
 
 namespace Arch.SharedKernel.Outbox;
 
+// TODO: maybe
 public static class OutboxSerializer
 {
-    public static async Task<TEvent> DeserializeAsync<TEvent>(this OutboxMessage outboxMessage) =>
-        await outboxMessage.ToMemoryStream().ToEvent<TEvent>().ConfigureAwait(false);
-
-    public static MemoryStream ToMemoryStream(this OutboxMessage outboxMessage)
+    public static async Task<object> DeserializeAsync(this OutboxMessage outboxMessage)
     {
-        MemoryStream stream = new();
+        using MemoryStream stream = new();
         using Utf8JsonWriter writer = new(stream);
 
         writer.WriteRawValue(outboxMessage.NonNull().Data);
-        writer.Flush();
+        await writer.FlushAsync().ConfigureAwait(false);
         stream.Position = 0;
 
-        return stream;
-    }
+        var result = (await JsonSerializer.DeserializeAsync(stream, outboxMessage.Type).ConfigureAwait(false))!;
 
-    public static async Task<TEvent> ToEvent<TEvent>(this MemoryStream memoryStream) =>
-        (await JsonSerializer.DeserializeAsync<TEvent>(memoryStream).ConfigureAwait(false))!;
+        return result;
+    }
 }
