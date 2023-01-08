@@ -1,4 +1,5 @@
 ﻿using Arch.SharedKernel.Events;
+using Arch.SharedKernel.Outbox;
 using AutoFixture;
 using MediatR;
 using Microsoft.Extensions.Configuration;
@@ -26,14 +27,17 @@ public sealed class TestServicesFactory : IAsyncLifetime
 
     public Mock<IGeocodeAdapter> GeocodeAdapterMock { get; } = new();
 
-    public EventBusAdapterSpy EventBusAdapterSpy { get; private set; }
+    public EventBusAdapterSpy EventBusAdapterSpy { get; private set; } = default!;
 
     public async Task InitializeAsync()
     {
         TripManagementContext dbContext = GetService<TripManagementContext>();
-
         await dbContext.Database.EnsureDeletedAsync();
         await dbContext.Database.EnsureCreatedAsync();
+
+        OutboxContext outboxContext = GetService<OutboxContext>();
+        await outboxContext.Database.EnsureDeletedAsync();
+        await outboxContext.Database.EnsureCreatedAsync();
     }
 
     public Task DisposeAsync()

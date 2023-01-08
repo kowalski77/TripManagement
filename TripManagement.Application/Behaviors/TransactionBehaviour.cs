@@ -1,5 +1,6 @@
 ﻿using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
+using Arch.SharedKernel.Outbox;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -10,8 +11,13 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
     where TRequest : IRequest<TResponse>
 {
     private readonly IDbContext dbContext;
+    private readonly OutboxService outboxService;
 
-    public TransactionBehaviour(IDbContext dbContext) => this.dbContext = dbContext;
+    public TransactionBehaviour(IDbContext dbContext, OutboxService outboxService)
+    {
+        this.dbContext = dbContext;
+        this.outboxService = outboxService;
+    }
 
     public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken) => 
         this.HandleInternal(next.NonNull(), cancellationToken);
@@ -33,6 +39,8 @@ public class TransactionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequ
 
         TResponse? response = await next().ConfigureAwait(false);
         await dbContext.CommitTransactionAsync(transaction, cancellationToken).ConfigureAwait(false);
+
+        await this.outboxService.PublishIntegrationEventsAsync(transaction.TransactionId, cancellationToken).ConfigureAwait(false);
 
         return response;
     }

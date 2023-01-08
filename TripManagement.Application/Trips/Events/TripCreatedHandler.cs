@@ -1,4 +1,4 @@
-﻿using Arch.SharedKernel.Events;
+﻿using Arch.SharedKernel.Outbox;
 using MediatR;
 using TripManagement.Domain.TripsAggregate;
 using TripCreatedIntegrationEvent = TripManagement.Contracts.TripCreated;
@@ -7,9 +7,9 @@ namespace TripManagement.Application.Trips.Events;
 
 public sealed class TripCreatedHandler : INotificationHandler<TripCreated>
 {
-    private readonly IEventBusAdapter eventBusAdapter;
+    private readonly OutboxService outboxService;
 
-    public TripCreatedHandler(IEventBusAdapter eventBusAdapter) => this.eventBusAdapter = eventBusAdapter;
+    public TripCreatedHandler(OutboxService outboxService) => this.outboxService = outboxService;
 
     public async Task Handle(TripCreated notification, CancellationToken cancellationToken)
     {
@@ -20,6 +20,6 @@ public sealed class TripCreatedHandler : INotificationHandler<TripCreated>
             notification.Origin.City.Value, 
             notification.Destination.City.Value);
 
-        await eventBusAdapter.PublishAsync(tripCreated, cancellationToken);
+        await this.outboxService.AddIntegrationEventAsync(tripCreated, cancellationToken);
     }
 }

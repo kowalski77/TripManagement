@@ -1,11 +1,9 @@
 ﻿using System.Data.Common;
-using Arch.SharedKernel;
 using Arch.SharedKernel.DomainDriven;
 using Arch.SharedKernel.Events;
-using Arch.SharedKernel.Outbox;
 using Microsoft.EntityFrameworkCore;
 
-namespace TripManagement.Application.Outbox;
+namespace Arch.SharedKernel.Outbox;
 
 public sealed class OutboxService
 {
@@ -17,10 +15,10 @@ public sealed class OutboxService
     {
         this.context = context;
         this.eventBusAdapter = eventBusAdapter;
-        this.outboxRepository = outboxRepositoryFactory(context.DatabaseFacade.GetDbConnection());
+        this.outboxRepository = outboxRepositoryFactory.NonNull()(context.NonNull().DatabaseFacade.GetDbConnection());
     }
 
-    public async Task AddIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default) => 
+    public async Task AddIntegrationEventAsync<TIntegrationEvent>(TIntegrationEvent integrationEvent, CancellationToken cancellationToken = default) =>
         await this.outboxRepository.SaveMessageAsync(integrationEvent.NonNull(), this.context.GetCurrentTransaction(), cancellationToken).ConfigureAwait(false);
 
     public async Task PublishIntegrationEventsAsync(Guid transactionId, CancellationToken cancellationToken = default)
@@ -35,7 +33,7 @@ public sealed class OutboxService
     public async Task PublishPendingIntegrationEventsAsync(CancellationToken cancellationToken = default)
     {
         IReadOnlyList<OutboxMessage> pendingOutboxMessages = await this.outboxRepository.GetNotPublishedAsync(cancellationToken).ConfigureAwait(false);
-        foreach (var outboxMessage in pendingOutboxMessages)
+        foreach (OutboxMessage outboxMessage in pendingOutboxMessages)
         {
             await this.TryPublishIntegrationEventsAsync(outboxMessage, cancellationToken).ConfigureAwait(false);
         }
@@ -45,7 +43,7 @@ public sealed class OutboxService
     {
         try
         {
-            var message = await outboxMessage.DeserializeAsync();
+            var message = await outboxMessage.DeserializeAsync().ConfigureAwait(false);
 
             await this.eventBusAdapter.PublishAsync(message, message.GetType(), cancellationToken).ConfigureAwait(false);
 
